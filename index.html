@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Comic HQ">
+<title>Comic HQ — Inventory & Listings</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Nunito', 'Segoe UI', sans-serif;
+    background: #0a0e1a; color: #e2e8f0;
+    min-height: 100vh; min-height: -webkit-fill-available;
+    overflow-x: hidden;
+  }
+  html { height: -webkit-fill-available; }
+  button { font-family: inherit; cursor: pointer; }
+  input, textarea, select {
+    font-family: inherit; font-size: 15px;
+    background: #1e293b; color: #e2e8f0;
+    border: 2px solid #334155; border-radius: 10px;
+    padding: 12px 14px; outline: none; width: 100%;
+  }
+  input:focus, textarea:focus, select:focus { border-color: #e94560; }
+
+  .setup-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px; background: linear-gradient(135deg, #0a0e1a 0%, #16213e 100%);
+  }
+  .setup-box {
+    max-width: 440px; width: 100%; background: rgba(30,41,59,0.7);
+    border: 1px solid #334155; border-radius: 20px; padding: 32px 24px;
+  }
+  .setup-box h1 {
+    font-family: 'Bangers', cursive; font-size: 32px; letter-spacing: 2px;
+    text-align: center; color: #fff; margin-bottom: 4px;
+  }
+  .setup-box .subtitle {
+    text-align: center; font-size: 13px; color: #64748b; margin-bottom: 24px;
+  }
+  .setup-box label {
+    display: block; font-size: 12px; font-weight: 700; color: #94a3b8;
+    margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .setup-box .hint {
+    font-size: 12px; color: #475569; margin-top: 8px; margin-bottom: 20px; line-height: 1.5;
+  }
+  .setup-box .hint a { color: #e94560; text-decoration: none; }
+  .btn-primary {
+    width: 100%; padding: 15px; border-radius: 12px; border: none;
+    background: linear-gradient(135deg, #e94560, #c23152); color: #fff;
+    font-size: 16px; font-weight: 800;
+  }
+  .btn-primary:disabled { opacity: 0.4; }
+
+  .app { display: none; flex-direction: column; min-height: 100vh; }
+  .app.active { display: flex; }
+
+  .topbar {
+    background: linear-gradient(135deg, #0f3460 0%, #1a1a6e 50%, #533483 100%);
+    padding: 14px 16px; border-bottom: 4px solid #e94560;
+    position: sticky; top: 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar-title {
+    font-family: 'Bangers', cursive; font-size: 22px; letter-spacing: 2px; color: #fff;
+  }
+  .topbar-actions { display: flex; gap: 8px; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.2); color: #fff; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .tabbar {
+    display: flex; background: #0f172a; border-bottom: 1px solid #1e293b;
+    position: sticky; top: 60px; z-index: 49;
+  }
+  .tab {
+    flex: 1; padding: 12px 4px; text-align: center; font-size: 13px;
+    font-weight: 800; border: none; background: transparent; color: #475569;
+    border-bottom: 3px solid transparent; transition: all 0.2s;
+  }
+  .tab.active { color: #e94560; border-bottom-color: #e94560; background: rgba(233,69,96,0.05); }
+
+  .content { flex: 1; padding: 16px; max-width: 800px; width: 100%; margin: 0 auto; padding-bottom: 100px; }
+
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-card {
+    padding: 14px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.8));
+    border: 1px solid #334155;
+  }
+  .stat-card.highlight { background: linear-gradient(135deg, rgba(233,69,96,0.1), rgba(83,52,131,0.1)); border-color: rgba(233,69,96,0.3); }
+  .stat-card.success { background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02)); border-color: rgba(16,185,129,0.3); }
+  .stat-label { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .stat-value { font-size: 22px; font-weight: 900; color: #f1f5f9; }
+  .stat-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+  .section-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin: 20px 0 10px;
+  }
+  .section-title { font-size: 16px; font-weight: 800; color: #f1f5f9; }
+
+  .fab {
+    position: fixed; bottom: 20px; right: 20px;
+    width: 60px; height: 60px; border-radius: 30px;
+    background: linear-gradient(135deg, #e94560, #c23152); color: #fff;
+    border: none; font-size: 28px; font-weight: 900;
+    box-shadow: 0 6px 20px rgba(233,69,96,0.5); z-index: 100;
+  }
+
+  .comic-list { display: flex; flex-direction: column; gap: 10px; }
+  .comic-row {
+    display: flex; gap: 12px; padding: 12px; border-radius: 12px;
+    background: rgba(30,41,59,0.6); border: 1px solid #334155; cursor: pointer;
+  }
+  .comic-row:active { transform: scale(0.98); }
+  .comic-thumb {
+    width: 60px; min-width: 60px; height: 90px; border-radius: 6px;
+    overflow: hidden; background: #0f172a;
+  }
+  .comic-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .comic-thumb.placeholder { display: flex; align-items: center; justify-content: center; font-size: 24px; color: #475569; }
+  .comic-info { flex: 1; min-width: 0; }
+  .comic-title { font-size: 14px; font-weight: 800; color: #f1f5f9; line-height: 1.3; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .comic-issue { font-size: 13px; color: #a78bfa; font-weight: 700; margin-bottom: 6px; }
+  .comic-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .badge {
+    padding: 2px 7px; border-radius: 5px; font-size: 10px; font-weight: 700;
+    display: inline-block; white-space: nowrap;
+  }
+  .comic-value { font-size: 14px; font-weight: 900; color: #10b981; margin-top: 4px; }
+
+  .empty-state { text-align: center; padding: 48px 24px; color: #64748b; }
+  .empty-state .icon { font-size: 56px; margin-bottom: 16px; opacity: 0.5; }
+  .empty-state .title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #94a3b8; }
+  .empty-state .sub { font-size: 13px; line-height: 1.5; }
+
+  .modal-bg {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85); z-index: 200;
+    display: none; align-items: flex-end;
+  }
+  .modal-bg.active { display: flex; }
+  .modal {
+    width: 100%; max-height: 92vh; background: #0f172a;
+    border-radius: 20px 20px 0 0; padding: 16px;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    border-top: 3px solid #e94560;
+  }
+  .modal-handle { width: 40px; height: 4px; background: #475569; border-radius: 2px; margin: 0 auto 16px; }
+  .modal-title { font-size: 18px; font-weight: 900; margin-bottom: 4px; color: #f1f5f9; }
+  .modal-subtitle { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    background: rgba(71,85,105,0.4); color: #cbd5e1;
+    width: 32px; height: 32px; border-radius: 16px; border: none;
+    font-size: 18px; line-height: 1;
+  }
+
+  .upload-zone {
+    border: 3px dashed #475569; border-radius: 14px; padding: 36px 20px;
+    text-align: center; background: rgba(30,41,59,0.5); margin-bottom: 12px;
+  }
+  .upload-zone .icon { font-size: 40px; margin-bottom: 8px; }
+  .upload-zone .label { font-size: 16px; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+  .upload-zone .sublabel { font-size: 12px; color: #94a3b8; }
+  .btn-camera-modal {
+    width: 100%; padding: 14px; border-radius: 10px;
+    border: 2px solid #e94560; background: rgba(233,69,96,0.1);
+    color: #e94560; font-size: 15px; font-weight: 700; margin-bottom: 16px;
+  }
+
+  .detail-cover {
+    width: 100%; max-height: 320px; border-radius: 12px; overflow: hidden;
+    background: #0f172a; display: flex; justify-content: center; margin-bottom: 14px;
+    border: 2px solid #334155;
+  }
+  .detail-cover img { max-height: 320px; max-width: 100%; object-fit: contain; }
+
+  .detail-name { font-size: 22px; font-weight: 900; color: #f1f5f9; line-height: 1.2; margin-bottom: 4px; }
+  .detail-issue { font-size: 16px; color: #a78bfa; font-weight: 700; margin-bottom: 10px; }
+
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .detail-cell {
+    padding: 10px 12px; border-radius: 10px;
+    background: rgba(30,41,59,0.6); border: 1px solid #334155;
+  }
+  .detail-cell-label { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+  .detail-cell-value { font-size: 13px; font-weight: 700; color: #e2e8f0; }
+
+  .recommendation { padding: 14px 16px; border-radius: 12px; margin-bottom: 14px; }
+  .rec-grade { background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(245,158,11,0.04)); border: 1px solid rgba(251,191,36,0.4); }
+  .rec-sell { background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.02)); border: 1px solid rgba(16,185,129,0.4); }
+  .rec-bulk { background: linear-gradient(135deg, rgba(100,116,139,0.15), rgba(100,116,139,0.05)); border: 1px solid rgba(100,116,139,0.4); }
+  .rec-skip { background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.02)); border: 1px solid rgba(239,68,68,0.3); }
+  .rec-unknown { background: rgba(30,41,59,0.6); border: 1px solid #334155; }
+
+  .rec-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .rec-grade .rec-label { color: #fbbf24; }
+  .rec-sell .rec-label { color: #10b981; }
+  .rec-bulk .rec-label { color: #94a3b8; }
+  .rec-skip .rec-label { color: #ef4444; }
+  .rec-unknown .rec-label { color: #94a3b8; }
+  .rec-action { font-size: 17px; font-weight: 900; margin-bottom: 6px; }
+  .rec-grade .rec-action { color: #fde68a; }
+  .rec-sell .rec-action { color: #6ee7b7; }
+  .rec-bulk .rec-action { color: #cbd5e1; }
+  .rec-skip .rec-action { color: #fca5a5; }
+  .rec-unknown .rec-action { color: #cbd5e1; }
+  .rec-reason { font-size: 13px; line-height: 1.5; opacity: 0.9; }
+
+  .info-box {
+    padding: 12px 14px; border-radius: 10px; margin-bottom: 12px;
+    background: rgba(30,41,59,0.6); border: 1px solid #334155;
+  }
+  .info-box .label { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .info-box .body { font-size: 13px; color: #cbd5e1; line-height: 1.5; white-space: pre-wrap; }
+
+  .price-box {
+    padding: 14px; border-radius: 12px; margin-bottom: 12px;
+    background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02));
+    border: 1px solid rgba(16,185,129,0.25);
+  }
+  .price-box .label { font-size: 11px; font-weight: 800; color: #10b981; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .price-box .body { font-size: 13px; color: #d1fae5; line-height: 1.7; white-space: pre-wrap; }
+
+  .status-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .status-btn {
+    padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+    border: 1px solid #334155; background: transparent; color: #94a3b8;
+  }
+  .status-btn.active { border-color: #e94560; color: #e94560; background: rgba(233,69,96,0.1); }
+
+  .action-stack { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .action-btn {
+    padding: 13px; border-radius: 10px; font-size: 14px; font-weight: 700;
+    border: 1px solid #334155; background: rgba(30,41,59,0.6); color: #e2e8f0;
+    text-align: left; display: flex; justify-content: space-between; align-items: center;
+  }
+  .action-btn .arrow { color: #64748b; }
+  .action-btn.danger { border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+
+  .spinner {
+    width: 40px; height: 40px; margin: 24px auto;
+    border: 4px solid #1e293b; border-top-color: #e94560;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { text-align: center; color: #94a3b8; font-size: 14px; }
+
+  .listing-output {
+    background: #0a0e1a; padding: 14px; border-radius: 10px;
+    border: 1px solid #334155; margin-bottom: 10px;
+  }
+  .listing-output .field-label { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .listing-output .field-value { font-size: 14px; color: #e2e8f0; line-height: 1.5; word-wrap: break-word; }
+  .copy-btn {
+    padding: 6px 10px; border-radius: 6px; border: 1px solid #475569;
+    background: transparent; color: #94a3b8; font-size: 11px; font-weight: 700;
+    margin-top: 6px;
+  }
+  .copy-btn.copied { color: #10b981; border-color: #10b981; }
+
+  .filter-bar { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 700;
+    border: 1px solid #334155; background: transparent; color: #94a3b8; white-space: nowrap;
+  }
+  .filter-chip.active { border-color: #e94560; color: #e94560; background: rgba(233,69,96,0.1); }
+</style>
+</head>
+<body>
+
+<div class="setup-screen" id="setupScreen">
+  <div class="setup-box">
+    <h1>COMIC HQ</h1>
+    <div class="subtitle">Inventory • Valuations • Listings</div>
+    <label>API Key</label>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-..." autocomplete="off">
+    <div class="hint">
+      Anthropic API key (get one at <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>). Stored only on this device.
+    </div>
+    <button class="btn-primary" id="saveKeyBtn" disabled>Let's Go</button>
+  </div>
+</div>
+
+<div class="app" id="mainApp">
+  <div class="topbar">
+    <div class="topbar-title">📚 COMIC HQ</div>
+    <div class="topbar-actions">
+      <button class="icon-btn" onclick="exportData()" title="Export">📤</button>
+      <button class="icon-btn" onclick="showSettings()" title="Settings">⚙️</button>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <button class="tab active" id="tabDashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+    <button class="tab" id="tabInventory" onclick="switchTab('inventory')">📚 Inventory</button>
+    <button class="tab" id="tabActions" onclick="switchTab('actions')">⚡ Actions</button>
+  </div>
+
+  <div class="content" id="content"></div>
+
+  <button class="fab" onclick="openScanModal()" title="Scan New Comic">+</button>
+</div>
+
+<div class="modal-bg" id="scanModal">
+  <div class="modal" style="position: relative;">
+    <button class="modal-close" onclick="closeScanModal()">×</button>
+    <div class="modal-handle"></div>
+    <div id="scanContent"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="detailModal">
+  <div class="modal" style="position: relative;">
+    <button class="modal-close" onclick="closeDetailModal()">×</button>
+    <div class="modal-handle"></div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="listingModal">
+  <div class="modal" style="position: relative;">
+    <button class="modal-close" onclick="closeListingModal()">×</button>
+    <div class="modal-handle"></div>
+    <div id="listingContent"></div>
+  </div>
+</div>
+
+<script>
+let apiKey = '';
+let inventory = [];
+let currentTab = 'dashboard';
+let currentFilter = 'all';
+let scanImage = null;
+let scanImageData = null;
+let detailComicId = null;
+
+const COMIC_PROMPT = `You are a comic book expert. Analyze this comic book image and provide identification info.
+Return ONLY valid JSON (no markdown, no backticks):
+{"title":"Full title","issue_number":"Issue number (e.g. #181)","publisher":"Publisher","year":"Year","era":"Golden/Silver/Bronze/Copper/Modern Age","cover_artist":"Artist or Unknown","key_issue":true/false,"key_issue_reason":"Why or N/A","notable_characters":"Major characters","variant":"Regular/variant/newsstand/direct","printing":"1st printing etc or Unknown","condition_notes":"Visible condition - spine, cover wear, color, tears","estimated_grade":"CGC range like 6.0-7.0","grade_label":"Poor/Fair/Good/Very Good/Fine/Very Fine/Near Mint/Mint","confidence":"high/medium/low"}`;
+
+function pricingPrompt(info) {
+  return `Search for current market prices for this comic book. Return ONLY a JSON object (no markdown, no commentary):
+{"raw_value_low":number,"raw_value_high":number,"graded_value_92":number,"graded_value_98":number,"market_notes":"brief 1-2 sentence context","trending":"up/down/stable"}
+
+Where graded_value_92 and graded_value_98 are CGC graded values (or 0 if not gradable/worth grading).
+
+Comic: ${info.title} ${info.issue_number}
+Publisher: ${info.publisher}
+Year: ${info.year}
+Estimated Grade: ${info.estimated_grade}
+Key Issue: ${info.key_issue ? 'Yes - ' + info.key_issue_reason : 'No'}
+Variant: ${info.variant}`;
+}
+
+function listingPrompt(comic) {
+  return `Generate an optimized listing for this comic book. Return ONLY valid JSON (no markdown):
+{"title":"eBay-optimized title (max 80 chars, key search terms)","description":"4-6 sentence description with condition, key features, what makes it desirable","price_suggestion":number,"keywords":"comma separated SEO tags","shipping_notes":"brief shipping recommendation"}
+
+Comic: ${comic.info.title} ${comic.info.issue_number}
+Publisher: ${comic.info.publisher}
+Year: ${comic.info.year}
+Era: ${comic.info.era}
+Grade: ${comic.info.estimated_grade} (${comic.info.grade_label})
+Key Issue: ${comic.info.key_issue ? 'Yes - ' + comic.info.key_issue_reason : 'No'}
+Characters: ${comic.info.notable_characters}
+Cover Artist: ${comic.info.cover_artist}
+Variant: ${comic.info.variant}
+Condition Notes: ${comic.info.condition_notes}
+Market Range: $${comic.pricing?.raw_value_low || '?'} - $${comic.pricing?.raw_value_high || '?'} raw`;
+}
+
+function init() {
+  const stored = localStorage.getItem('comichq_api_key');
+  const inv = localStorage.getItem('comichq_inventory');
+  if (inv) try { inventory = JSON.parse(inv); } catch(e) { inventory = []; }
+  if (stored) {
+    apiKey = stored;
+    showApp();
+  } else {
+    document.getElementById('setupScreen').style.display = 'flex';
+  }
+
+  const input = document.getElementById('apiKeyInput');
+  const btn = document.getElementById('saveKeyBtn');
+  input.addEventListener('input', () => { btn.disabled = !input.value.trim(); });
+  btn.addEventListener('click', () => {
+    apiKey = input.value.trim();
+    localStorage.setItem('comichq_api_key', apiKey);
+    showApp();
+  });
+}
+
+function showApp() {
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('mainApp').classList.add('active');
+  renderDashboard();
+}
+
+function showSettings() {
+  if (confirm('Reset API key? You will need to enter it again.')) {
+    localStorage.removeItem('comichq_api_key');
+    location.reload();
+  }
+}
+
+function saveInventory() {
+  localStorage.setItem('comichq_inventory', JSON.stringify(inventory));
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabDashboard').classList.toggle('active', tab === 'dashboard');
+  document.getElementById('tabInventory').classList.toggle('active', tab === 'inventory');
+  document.getElementById('tabActions').classList.toggle('active', tab === 'actions');
+  if (tab === 'dashboard') renderDashboard();
+  else if (tab === 'inventory') renderInventory();
+  else renderActions();
+}
+
+function getRecommendation(comic) {
+  const p = comic.pricing;
+  if (!p || (p.raw_value_high === 0 && p.raw_value_low === 0)) {
+    return { type: 'unknown', action: 'Pricing pending', reason: 'Run pricing analysis to get a recommendation.' };
+  }
+
+  const rawMid = (p.raw_value_low + p.raw_value_high) / 2;
+  const grade98 = p.graded_value_98 || 0;
+  const grade92 = p.graded_value_92 || 0;
+  const gradingCost = 35;
+
+  const grade = comic.info.grade_label || '';
+  const isStrongCondition = grade.toLowerCase().includes('near mint') || grade.toLowerCase().includes('mint') || grade.toLowerCase().includes('very fine');
+
+  if (rawMid < 5) {
+    return {
+      type: 'bulk',
+      action: 'Bundle in a Bulk Lot',
+      reason: `Raw value (~$${rawMid.toFixed(0)}) is too low to list individually. Group with similar comics into a 25-50 issue lot.`
+    };
+  }
+
+  const expectedGradedValue = grade98 * 0.2 + grade92 * 0.5 + rawMid * 0.3;
+  const gradedNetExpected = expectedGradedValue - gradingCost;
+  const gradedSpread = gradedNetExpected - rawMid;
+
+  if (isStrongCondition && grade98 > 0 && gradedSpread > rawMid && grade98 >= 100) {
+    return {
+      type: 'grade',
+      action: 'Submit for CGC Grading',
+      reason: `Strong condition + meaningful spread. Raw mid: $${rawMid.toFixed(0)}, expected graded value: ~$${expectedGradedValue.toFixed(0)}. After ~$35 grading cost, expected upside is ~$${gradedSpread.toFixed(0)}.`
+    };
+  }
+
+  if (rawMid >= 5) {
+    return {
+      type: 'sell',
+      action: 'Sell Raw',
+      reason: `Estimated value $${p.raw_value_low}-$${p.raw_value_high}. ${comic.info.key_issue ? 'Key issue gives extra search demand. ' : ''}List at $${(p.raw_value_high * 0.95).toFixed(0)} or accept best offers above $${p.raw_value_low}.`
+    };
+  }
+
+  return { type: 'skip', action: 'Pass', reason: 'Not worth the listing time.' };
+}
+
+function pubColor(p) {
+  p = (p || '').toLowerCase();
+  if (p.includes('marvel')) return '#e23636';
+  if (p.includes('dc')) return '#0476F2';
+  if (p.includes('image')) return '#00b4d8';
+  if (p.includes('dark horse')) return '#c41e3a';
+  return '#8b5cf6';
+}
+
+function statusToBadge(status) {
+  const map = {
+    'in_stock': { label: 'In Stock', color: '#3b82f6' },
+    'listed': { label: 'Listed', color: '#a855f7' },
+    'grading': { label: 'At CGC', color: '#fbbf24' },
+    'sold': { label: 'Sold', color: '#10b981' },
+    'bulk': { label: 'In Bulk Lot', color: '#64748b' }
+  };
+  const m = map[status] || map['in_stock'];
+  return `<span class="badge" style="background:${m.color}22;color:${m.color}">${m.label}</span>`;
+}
+
+function renderDashboard() {
+  const c = document.getElementById('content');
+
+  const total = inventory.length;
+  const totalValue = inventory.reduce((sum, comic) => {
+    const p = comic.pricing;
+    return sum + (p ? (p.raw_value_low + p.raw_value_high) / 2 : 0);
+  }, 0);
+  const keyIssues = inventory.filter(c => c.info?.key_issue).length;
+  const sold = inventory.filter(c => c.status === 'sold').length;
+  const listed = inventory.filter(c => c.status === 'listed').length;
+  const soldRevenue = inventory.filter(c => c.status === 'sold').reduce((sum, c) => sum + (c.sold_price || 0), 0);
+
+  const recommendations = inventory.filter(c => c.pricing).map(c => ({...c, rec: getRecommendation(c)}));
+  const toGrade = recommendations.filter(c => c.rec.type === 'grade' && c.status === 'in_stock').slice(0, 3);
+  const toSell = recommendations.filter(c => c.rec.type === 'sell' && c.status === 'in_stock').slice(0, 3);
+
+  let html = `
+    <div class="stats-grid">
+      <div class="stat-card highlight">
+        <div class="stat-label">📚 Total Comics</div>
+        <div class="stat-value">${total}</div>
+        <div class="stat-sub">${keyIssues} key issues</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">💰 Est. Box Value</div>
+        <div class="stat-value">$${totalValue.toFixed(0)}</div>
+        <div class="stat-sub">at estimated grades</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">📤 Listed</div>
+        <div class="stat-value">${listed}</div>
+        <div class="stat-sub">currently for sale</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">✅ Sold</div>
+        <div class="stat-value">${sold}</div>
+        <div class="stat-sub">$${soldRevenue.toFixed(0)} revenue</div>
+      </div>
+    </div>
+  `;
+
+  if (total === 0) {
+    html += `
+      <div class="empty-state">
+        <div class="icon">📷</div>
+        <div class="title">Tap + to scan your first comic</div>
+        <div class="sub">Build your inventory one book at a time.<br>Scanner identifies, prices, and recommends what to do.</div>
+      </div>
+    `;
+  } else {
+    if (toGrade.length > 0) {
+      html += `<div class="section-header"><div class="section-title">🏆 Send for Grading</div></div>`;
+      html += '<div class="comic-list">';
+      toGrade.forEach(comic => html += renderComicRow(comic));
+      html += '</div>';
+    }
+
+    if (toSell.length > 0) {
+      html += `<div class="section-header"><div class="section-title">💸 Ready to List</div></div>`;
+      html += '<div class="comic-list">';
+      toSell.forEach(comic => html += renderComicRow(comic));
+      html += '</div>';
+    }
+
+    if (toGrade.length === 0 && toSell.length === 0 && total > 0) {
+      html += `<div class="empty-state"><div class="title">Scan more or refresh pricing</div><div class="sub">Recommendations will appear here once comics have pricing data.</div></div>`;
+    }
+  }
+
+  c.innerHTML = html;
+}
+
+function renderComicRow(comic) {
+  const value = comic.pricing && comic.pricing.raw_value_high > 0
+    ? `$${((comic.pricing.raw_value_low + comic.pricing.raw_value_high) / 2).toFixed(0)} raw`
+    : 'Pricing pending';
+  const statusBadge = statusToBadge(comic.status);
+  return `
+    <div class="comic-row" onclick="openDetail('${comic.id}')">
+      <div class="comic-thumb">
+        ${comic.image ? `<img src="${comic.image}">` : `<div class="placeholder">📚</div>`}
+      </div>
+      <div class="comic-info">
+        <div class="comic-title">${comic.info?.title || 'Unknown Comic'}</div>
+        <div class="comic-issue">${comic.info?.issue_number || ''}</div>
+        <div class="comic-meta">
+          ${statusBadge}
+          ${comic.info?.key_issue ? '<span class="badge" style="background:rgba(251,191,36,0.15);color:#fbbf24">🔑 KEY</span>' : ''}
+          ${comic.info?.grade_label ? `<span class="badge" style="background:rgba(100,116,139,0.2);color:#cbd5e1">${comic.info.grade_label}</span>` : ''}
+        </div>
+        <div class="comic-value">${value}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderInventory() {
+  const c = document.getElementById('content');
+
+  let filtered = inventory;
+  if (currentFilter === 'in_stock') filtered = inventory.filter(c => c.status === 'in_stock');
+  else if (currentFilter === 'listed') filtered = inventory.filter(c => c.status === 'listed');
+  else if (currentFilter === 'grading') filtered = inventory.filter(c => c.status === 'grading');
+  else if (currentFilter === 'sold') filtered = inventory.filter(c => c.status === 'sold');
+  else if (currentFilter === 'key') filtered = inventory.filter(c => c.info?.key_issue);
+
+  let html = `
+    <div class="filter-bar">
+      <button class="filter-chip ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">All (${inventory.length})</button>
+      <button class="filter-chip ${currentFilter==='in_stock'?'active':''}" onclick="setFilter('in_stock')">In Stock</button>
+      <button class="filter-chip ${currentFilter==='listed'?'active':''}" onclick="setFilter('listed')">Listed</button>
+      <button class="filter-chip ${currentFilter==='grading'?'active':''}" onclick="setFilter('grading')">At CGC</button>
+      <button class="filter-chip ${currentFilter==='sold'?'active':''}" onclick="setFilter('sold')">Sold</button>
+      <button class="filter-chip ${currentFilter==='key'?'active':''}" onclick="setFilter('key')">🔑 Keys</button>
+    </div>
+  `;
+
+  if (filtered.length === 0) {
+    html += `<div class="empty-state"><div class="icon">📭</div><div class="title">No comics here yet</div><div class="sub">Tap + to scan and add comics.</div></div>`;
+  } else {
+    html += '<div class="comic-list">';
+    filtered.forEach(comic => html += renderComicRow(comic));
+    html += '</div>';
+  }
+
+  c.innerHTML = html;
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  renderInventory();
+}
+
+function renderActions() {
+  const c = document.getElementById('content');
+  const recs = inventory.filter(c => c.pricing && c.status === 'in_stock').map(c => ({...c, rec: getRecommendation(c)}));
+
+  const grade = recs.filter(c => c.rec.type === 'grade');
+  const sell = recs.filter(c => c.rec.type === 'sell');
+  const bulk = recs.filter(c => c.rec.type === 'bulk');
+
+  const totalGradeValue = grade.reduce((s,c) => s + ((c.pricing.graded_value_92 || 0) * 0.5 + (c.pricing.graded_value_98 || 0) * 0.2), 0);
+  const totalSellValue = sell.reduce((s,c) => s + (c.pricing.raw_value_low + c.pricing.raw_value_high) / 2, 0);
+  const totalBulkValue = bulk.reduce((s,c) => s + (c.pricing.raw_value_low + c.pricing.raw_value_high) / 2, 0);
+
+  let html = `
+    <div class="section-header"><div class="section-title">⚡ Recommended Actions</div></div>
+
+    <div class="stat-card" style="margin-bottom: 12px;">
+      <div class="stat-label">🏆 Send for Grading</div>
+      <div class="stat-value">${grade.length} comics</div>
+      <div class="stat-sub">~$${totalGradeValue.toFixed(0)} expected graded value (cost ~$${(grade.length * 35).toFixed(0)})</div>
+    </div>
+
+    <div class="stat-card" style="margin-bottom: 12px;">
+      <div class="stat-label">💸 List for Raw Sale</div>
+      <div class="stat-value">${sell.length} comics</div>
+      <div class="stat-sub">~$${totalSellValue.toFixed(0)} estimated revenue</div>
+    </div>
+
+    <div class="stat-card" style="margin-bottom: 12px;">
+      <div class="stat-label">📦 Bundle into Bulk Lots</div>
+      <div class="stat-value">${bulk.length} comics</div>
+      <div class="stat-sub">~$${totalBulkValue.toFixed(0)} value (group as themed lots)</div>
+    </div>
+  `;
+
+  if (grade.length > 0) {
+    html += `<div class="section-header"><div class="section-title">🏆 Grading Candidates</div></div><div class="comic-list">`;
+    grade.forEach(comic => html += renderComicRow(comic));
+    html += '</div>';
+  }
+
+  if (sell.length > 0) {
+    html += `<div class="section-header"><div class="section-title">💸 Ready to List</div></div><div class="comic-list">`;
+    sell.forEach(comic => html += renderComicRow(comic));
+    html += '</div>';
+  }
+
+  if (bulk.length > 0) {
+    html += `<div class="section-header"><div class="section-title">📦 Bulk Lot Material</div></div><div class="comic-list">`;
+    bulk.forEach(comic => html += renderComicRow(comic));
+    html += '</div>';
+  }
+
+  if (recs.length === 0) {
+    html += `<div class="empty-state"><div class="icon">📊</div><div class="title">No recommendations yet</div><div class="sub">Scan comics and run pricing to see what to sell, grade, or bundle.</div></div>`;
+  }
+
+  c.innerHTML = html;
+}
+
+function openScanModal() {
+  scanImage = null;
+  scanImageData = null;
+  document.getElementById('scanModal').classList.add('active');
+  renderScanUpload();
+}
+
+function closeScanModal() {
+  document.getElementById('scanModal').classList.remove('active');
+}
+
+function renderScanUpload() {
+  document.getElementById('scanContent').innerHTML = `
+    <div class="modal-title">Scan a Comic</div>
+    <div class="modal-subtitle">Take a photo or upload a cover image</div>
+    <div class="upload-zone" onclick="document.getElementById('scanFile').click()">
+      <div class="icon">📚</div>
+      <div class="label">Upload Cover Photo</div>
+      <div class="sublabel">Tap to browse</div>
+    </div>
+    <button class="btn-camera-modal" onclick="document.getElementById('scanCam').click()">📱 Take Photo with Camera</button>
+    <input type="file" accept="image/*" id="scanFile" style="display:none">
+    <input type="file" accept="image/*" capture="environment" id="scanCam" style="display:none">
+  `;
+  document.getElementById('scanFile').onchange = (e) => handleScanFile(e.target.files[0]);
+  document.getElementById('scanCam').onchange = (e) => handleScanFile(e.target.files[0]);
+}
+
+function handleScanFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    scanImage = e.target.result;
+    scanImageData = { base64: e.target.result.split(',')[1], media_type: file.type };
+    renderScanPreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderScanPreview() {
+  document.getElementById('scanContent').innerHTML = `
+    <div class="modal-title">Confirm & Scan</div>
+    <div class="modal-subtitle">Looks good? Identify this comic.</div>
+    <div class="detail-cover"><img src="${scanImage}"></div>
+    <div style="display:flex; gap:10px;">
+      <button class="action-btn" style="flex:1; justify-content:center" onclick="renderScanUpload()">← Back</button>
+      <button class="btn-primary" style="flex:2" onclick="runScan()">⚡ Identify Comic</button>
+    </div>
+  `;
+}
+
+async function runScan() {
+  document.getElementById('scanContent').innerHTML = `
+    <div class="modal-title">Scanning...</div>
+    <div class="spinner"></div>
+    <div class="loading-text">Identifying issue, publisher, and condition</div>
+  `;
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: scanImageData.media_type, data: scanImageData.base64 } },
+            { type: 'text', text: COMIC_PROMPT }
+          ]
+        }]
+      })
+    });
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = (data.content || []).map(i => i.text || '').join('');
+    const info = JSON.parse(text.replace(/```json|```/g, '').trim());
+
+    document.getElementById('scanContent').innerHTML = `
+      <div class="modal-title">Identified!</div>
+      <div class="modal-subtitle">${info.title} ${info.issue_number}</div>
+      <div class="spinner"></div>
+      <div class="loading-text">Looking up market prices...</div>
+    `;
+
+    const pricing = await runPricing(info);
+
+    const id = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+    const comic = {
+      id,
+      image: scanImage,
+      info,
+      pricing,
+      status: 'in_stock',
+      added_at: new Date().toISOString(),
+      sold_price: null,
+      listing: null
+    };
+    inventory.unshift(comic);
+    saveInventory();
+
+    closeScanModal();
+    openDetail(id);
+  } catch (e) {
+    console.error(e);
+    document.getElementById('scanContent').innerHTML = `
+      <div class="modal-title" style="color:#fca5a5">Scan Failed</div>
+      <div class="modal-subtitle">${e.message || "Couldn't identify this comic. Try a clearer photo."}</div>
+      <button class="btn-primary" onclick="renderScanUpload()" style="margin-top:16px">Try Again</button>
+    `;
+  }
+}
+
+async function runPricing(info) {
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{ role: 'user', content: pricingPrompt(info) }]
+      })
+    });
+    const data = await resp.json();
+    const textBlocks = (data.content || []).filter(i => i.type === 'text').map(i => i.text);
+    const fullText = textBlocks.join('\n');
+
+    const jsonMatch = fullText.match(/\{[\s\S]*?\}/);
+    if (jsonMatch) {
+      try { return JSON.parse(jsonMatch[0]); } catch(e) {}
+    }
+
+    return { raw_value_low: 0, raw_value_high: 0, graded_value_92: 0, graded_value_98: 0, market_notes: fullText.slice(0, 200), trending: 'unknown' };
+  } catch (e) {
+    return { raw_value_low: 0, raw_value_high: 0, graded_value_92: 0, graded_value_98: 0, market_notes: 'Pricing lookup failed', trending: 'unknown' };
+  }
+}
+
+function openDetail(id) {
+  detailComicId = id;
+  document.getElementById('detailModal').classList.add('active');
+  renderDetail();
+}
+
+function closeDetailModal() {
+  document.getElementById('detailModal').classList.remove('active');
+  detailComicId = null;
+  if (currentTab === 'dashboard') renderDashboard();
+  else if (currentTab === 'inventory') renderInventory();
+  else renderActions();
+}
+
+function renderDetail() {
+  const comic = inventory.find(c => c.id === detailComicId);
+  if (!comic) { closeDetailModal(); return; }
+
+  const rec = getRecommendation(comic);
+  const recClass = `rec-${rec.type}`;
+
+  let html = `
+    ${comic.image ? `<div class="detail-cover"><img src="${comic.image}"></div>` : ''}
+    <div class="detail-name">${comic.info.title}</div>
+    <div class="detail-issue">${comic.info.issue_number}</div>
+
+    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;">
+      <span class="badge" style="background:${pubColor(comic.info.publisher)}22;color:${pubColor(comic.info.publisher)}">${comic.info.publisher}</span>
+      <span class="badge" style="background:rgba(100,116,139,0.2);color:#cbd5e1">${comic.info.era}</span>
+      <span class="badge" style="background:rgba(100,116,139,0.2);color:#cbd5e1">${comic.info.year}</span>
+      ${comic.info.key_issue ? '<span class="badge" style="background:rgba(251,191,36,0.15);color:#fbbf24">🔑 KEY ISSUE</span>' : ''}
+    </div>
+
+    <div class="recommendation ${recClass}">
+      <div class="rec-label">Recommended Action</div>
+      <div class="rec-action">${rec.action}</div>
+      <div class="rec-reason">${rec.reason}</div>
+    </div>
+  `;
+
+  if (comic.pricing && comic.pricing.raw_value_high > 0) {
+    html += `
+      <div class="price-box">
+        <div class="label">💰 Market Pricing</div>
+        <div class="body">Raw: $${comic.pricing.raw_value_low}–$${comic.pricing.raw_value_high}${comic.pricing.graded_value_92 ? `\nCGC 9.2: $${comic.pricing.graded_value_92}` : ''}${comic.pricing.graded_value_98 ? `\nCGC 9.8: $${comic.pricing.graded_value_98}` : ''}${comic.pricing.market_notes ? '\n\n' + comic.pricing.market_notes : ''}</div>
+      </div>
+    `;
+  }
+
+  html += `
+    <div class="detail-grid">
+      <div class="detail-cell"><div class="detail-cell-label">Grade Est.</div><div class="detail-cell-value">${comic.info.estimated_grade}</div></div>
+      <div class="detail-cell"><div class="detail-cell-label">Condition</div><div class="detail-cell-value">${comic.info.grade_label}</div></div>
+      <div class="detail-cell"><div class="detail-cell-label">Variant</div><div class="detail-cell-value">${comic.info.variant || 'Regular'}</div></div>
+      <div class="detail-cell"><div class="detail-cell-label">Cover Artist</div><div class="detail-cell-value">${comic.info.cover_artist || 'Unknown'}</div></div>
+    </div>
+  `;
+
+  if (comic.info.key_issue && comic.info.key_issue_reason) {
+    html += `<div class="info-box" style="background:rgba(251,191,36,0.05);border-color:rgba(251,191,36,0.2)"><div class="label" style="color:#fbbf24">🔑 Why It's a Key</div><div class="body" style="color:#fde68a">${comic.info.key_issue_reason}</div></div>`;
+  }
+
+  if (comic.info.notable_characters) {
+    html += `<div class="info-box"><div class="label">🦸 Characters</div><div class="body">${comic.info.notable_characters}</div></div>`;
+  }
+
+  if (comic.info.condition_notes) {
+    html += `<div class="info-box"><div class="label">🔍 Condition Notes</div><div class="body">${comic.info.condition_notes}</div></div>`;
+  }
+
+  html += `
+    <div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:14px 0 6px">Status</div>
+    <div class="status-row">
+      <button class="status-btn ${comic.status==='in_stock'?'active':''}" onclick="setStatus('in_stock')">In Stock</button>
+      <button class="status-btn ${comic.status==='listed'?'active':''}" onclick="setStatus('listed')">Listed</button>
+      <button class="status-btn ${comic.status==='grading'?'active':''}" onclick="setStatus('grading')">At CGC</button>
+      <button class="status-btn ${comic.status==='sold'?'active':''}" onclick="setStatus('sold')">Sold</button>
+      <button class="status-btn ${comic.status==='bulk'?'active':''}" onclick="setStatus('bulk')">Bulk Lot</button>
+    </div>
+  `;
+
+  if (comic.status === 'sold') {
+    html += `
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Sold For</div>
+        <input type="number" id="soldPriceInput" placeholder="Sold price" value="${comic.sold_price || ''}" onchange="updateSoldPrice(this.value)">
+      </div>
+    `;
+  }
+
+  html += `<div class="action-stack">`;
+  html += `<button class="action-btn" onclick="generateListing('${comic.id}')"><span>📝 Generate Listing</span><span class="arrow">→</span></button>`;
+  html += `<button class="action-btn" onclick="rerunPricing('${comic.id}')"><span>${comic.pricing && comic.pricing.raw_value_high > 0 ? '🔄 Refresh Pricing' : '💰 Run Pricing'}</span><span class="arrow">→</span></button>`;
+  html += `<button class="action-btn danger" onclick="deleteComic('${comic.id}')"><span>🗑️ Delete</span><span class="arrow">→</span></button>`;
+  html += `</div>`;
+
+  document.getElementById('detailContent').innerHTML = html;
+}
+
+function setStatus(status) {
+  const comic = inventory.find(c => c.id === detailComicId);
+  if (!comic) return;
+  comic.status = status;
+  saveInventory();
+  renderDetail();
+}
+
+function updateSoldPrice(price) {
+  const comic = inventory.find(c => c.id === detailComicId);
+  if (!comic) return;
+  comic.sold_price = parseFloat(price) || 0;
+  saveInventory();
+}
+
+function deleteComic(id) {
+  if (!confirm('Delete this comic from inventory?')) return;
+  inventory = inventory.filter(c => c.id !== id);
+  saveInventory();
+  closeDetailModal();
+}
+
+async function rerunPricing(id) {
+  const comic = inventory.find(c => c.id === id);
+  if (!comic) return;
+  document.getElementById('detailContent').innerHTML = `
+    <div class="modal-title">Refreshing prices...</div>
+    <div class="spinner"></div>
+    <div class="loading-text">Searching current market data</div>
+  `;
+  comic.pricing = await runPricing(comic.info);
+  saveInventory();
+  renderDetail();
+}
+
+async function generateListing(id) {
+  const comic = inventory.find(c => c.id === id);
+  if (!comic) return;
+
+  document.getElementById('listingModal').classList.add('active');
+  document.getElementById('listingContent').innerHTML = `
+    <div class="modal-title">Generating listing...</div>
+    <div class="spinner"></div>
+    <div class="loading-text">Writing optimized title, description, and price</div>
+  `;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        messages: [{ role: 'user', content: listingPrompt(comic) }]
+      })
+    });
+    const data = await resp.json();
+    const text = (data.content || []).map(i => i.text || '').join('');
+    const listing = JSON.parse(text.replace(/```json|```/g, '').trim());
+
+    comic.listing = listing;
+    saveInventory();
+
+    renderListing(comic, listing);
+  } catch (e) {
+    document.getElementById('listingContent').innerHTML = `
+      <div class="modal-title" style="color:#fca5a5">Failed to generate</div>
+      <div class="modal-subtitle">${e.message}</div>
+    `;
+  }
+}
+
+function escapeForCopy(s) {
+  return (s || '').replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+}
+
+function renderListing(comic, listing) {
+  document.getElementById('listingContent').innerHTML = `
+    <div class="modal-title">📝 Listing Ready</div>
+    <div class="modal-subtitle">${comic.info.title} ${comic.info.issue_number}</div>
+
+    <div class="listing-output">
+      <div class="field-label">eBay Title (${listing.title.length}/80 chars)</div>
+      <div class="field-value">${listing.title}</div>
+      <button class="copy-btn" onclick="copyText(this, \`${escapeForCopy(listing.title)}\`)">📋 Copy Title</button>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">Suggested Price</div>
+      <div class="field-value" style="font-size:20px;font-weight:900;color:#10b981">$${listing.price_suggestion}</div>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">Description</div>
+      <div class="field-value">${listing.description}</div>
+      <button class="copy-btn" onclick="copyText(this, \`${escapeForCopy(listing.description)}\`)">📋 Copy Description</button>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">Keywords / Tags</div>
+      <div class="field-value">${listing.keywords}</div>
+      <button class="copy-btn" onclick="copyText(this, \`${escapeForCopy(listing.keywords)}\`)">📋 Copy Keywords</button>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">📦 Shipping Notes</div>
+      <div class="field-value">${listing.shipping_notes}</div>
+    </div>
+
+    <div class="action-stack">
+      <button class="btn-primary" onclick="markListed('${comic.id}')">✓ Mark as Listed</button>
+    </div>
+  `;
+}
+
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const original = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function markListed(id) {
+  const comic = inventory.find(c => c.id === id);
+  if (!comic) return;
+  comic.status = 'listed';
+  saveInventory();
+  closeListingModal();
+  if (detailComicId) renderDetail();
+}
+
+function closeListingModal() {
+  document.getElementById('listingModal').classList.remove('active');
+}
+
+function exportData() {
+  if (inventory.length === 0) { alert('No inventory to export'); return; }
+  const headers = ['Title','Issue','Publisher','Year','Era','Grade','Key Issue','Status','Raw Low','Raw High','CGC 9.2','CGC 9.8','Sold Price','Added'];
+  const rows = inventory.map(c => [
+    c.info?.title || '',
+    c.info?.issue_number || '',
+    c.info?.publisher || '',
+    c.info?.year || '',
+    c.info?.era || '',
+    c.info?.estimated_grade || '',
+    c.info?.key_issue ? 'Yes' : 'No',
+    c.status,
+    c.pricing?.raw_value_low || '',
+    c.pricing?.raw_value_high || '',
+    c.pricing?.graded_value_92 || '',
+    c.pricing?.graded_value_98 || '',
+    c.sold_price || '',
+    c.added_at?.split('T')[0] || ''
+  ]);
+  const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'comic_inventory_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+init();
+</script>
+</body>
+</html>
