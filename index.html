@@ -163,6 +163,17 @@
     font-size: 18px; line-height: 1;
   }
 
+  .photo-step-indicator {
+    display: flex; gap: 8px; margin-bottom: 14px;
+  }
+  .step-pill {
+    flex: 1; padding: 8px 10px; border-radius: 8px; text-align: center;
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    border: 1px solid #334155; background: rgba(30,41,59,0.5); color: #475569;
+  }
+  .step-pill.active { border-color: #e94560; color: #e94560; background: rgba(233,69,96,0.1); }
+  .step-pill.done { border-color: #10b981; color: #10b981; background: rgba(16,185,129,0.08); }
+
   .upload-zone {
     border: 3px dashed #475569; border-radius: 14px; padding: 36px 20px;
     text-align: center; background: rgba(30,41,59,0.5); margin-bottom: 12px;
@@ -174,6 +185,29 @@
     width: 100%; padding: 14px; border-radius: 10px;
     border: 2px solid #e94560; background: rgba(233,69,96,0.1);
     color: #e94560; font-size: 15px; font-weight: 700; margin-bottom: 16px;
+  }
+
+  .photo-tip {
+    padding: 12px 14px; border-radius: 10px; margin-bottom: 14px;
+    background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.2);
+  }
+  .photo-tip .tip-label { font-size: 11px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .photo-tip .tip-body { font-size: 13px; color: #fde68a; line-height: 1.5; }
+
+  .photo-stack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .photo-row {
+    display: flex; gap: 10px; padding: 10px; border-radius: 10px;
+    background: rgba(30,41,59,0.5); border: 1px solid #334155;
+    align-items: center;
+  }
+  .photo-mini { width: 56px; height: 80px; border-radius: 6px; overflow: hidden; background: #0f172a; }
+  .photo-mini img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-info { flex: 1; }
+  .photo-info .label { font-size: 13px; font-weight: 800; color: #f1f5f9; }
+  .photo-info .sub { font-size: 11px; color: #64748b; }
+  .skip-btn {
+    background: transparent; border: 1px solid #475569; color: #94a3b8;
+    padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 700;
   }
 
   .detail-cover {
@@ -340,13 +374,25 @@ let apiKey = '';
 let inventory = [];
 let currentTab = 'dashboard';
 let currentFilter = 'all';
-let scanImage = null;       // small thumbnail for inventory storage
-let scanImageData = null;   // compressed base64 for API
 let detailComicId = null;
 
-const COMIC_PROMPT = `You are a comic book expert. Analyze this comic book image and provide identification info.
+// Scan state — now supports cover + spine
+let scanState = {
+  cover: null,    // { thumbnail, base64, mediaType, preview }
+  spine: null,    // { thumbnail, base64, mediaType, preview }
+  step: 'cover'   // cover -> spine -> review -> scanning
+};
+
+const COMIC_PROMPT = `You are a comic book expert and CGC grading specialist. Analyze the provided photo(s) of a comic book.
+
+You will receive 1 or 2 images:
+- Image 1: Front cover (always provided)
+- Image 2: Spine view (if provided) — use this to assess spine roll, spine ticks, spine splits, and stress lines
+
+Use both images together for the most accurate grade assessment. The spine is critical for grading — a clean cover with a damaged spine grades much lower than its appearance suggests.
+
 Return ONLY valid JSON (no markdown, no backticks):
-{"title":"Full title","issue_number":"Issue number (e.g. #181)","publisher":"Publisher","year":"Year","era":"Golden/Silver/Bronze/Copper/Modern Age","cover_artist":"Artist or Unknown","key_issue":true/false,"key_issue_reason":"Why or N/A","notable_characters":"Major characters","variant":"Regular/variant/newsstand/direct","printing":"1st printing etc or Unknown","condition_notes":"Visible condition - spine, cover wear, color, tears","estimated_grade":"CGC range like 6.0-7.0","grade_label":"Poor/Fair/Good/Very Good/Fine/Very Fine/Near Mint/Mint","confidence":"high/medium/low"}`;
+{"title":"Full title","issue_number":"Issue number (e.g. #181)","publisher":"Publisher","year":"Year","era":"Golden/Silver/Bronze/Copper/Modern Age","cover_artist":"Artist or Unknown","key_issue":true/false,"key_issue_reason":"Why or N/A","notable_characters":"Major characters","variant":"Regular/variant/newsstand/direct","printing":"1st printing etc or Unknown","condition_notes":"Detailed condition notes covering BOTH cover and spine if both provided. Mention spine roll, spine ticks, color breaks, edge wear, corner wear, surface defects.","spine_assessment":"Specific spine condition observations, or 'No spine photo provided' if only cover sent","estimated_grade":"CGC range like 6.0-7.0 or 9.0-9.4","grade_label":"Poor/Fair/Good/Very Good/Fine/Very Fine/Near Mint/Mint","grade_confidence":"low/medium/high - your confidence in the grade estimate","confidence":"high/medium/low - confidence in the identification"}`;
 
 function pricingPrompt(info) {
   return `Search for current market prices for this comic book. Return ONLY a JSON object (no markdown, no commentary):
@@ -380,12 +426,10 @@ Market Range: $${comic.pricing?.raw_value_low || '?'} - $${comic.pricing?.raw_va
 }
 
 // ============ IMAGE COMPRESSION ============
-// Resize image to max dimension and compress to under target size for API.
-// Also produces a smaller thumbnail for inventory storage to avoid filling localStorage.
 function compressImage(file, opts = {}) {
-  const maxDim = opts.maxDim || 1600;       // for API image
-  const maxBytes = opts.maxBytes || 4_500_000; // stay safely under 5MB
-  const thumbDim = opts.thumbDim || 400;    // for inventory storage
+  const maxDim = opts.maxDim || 1600;
+  const maxBytes = opts.maxBytes || 4_500_000;
+  const thumbDim = opts.thumbDim || 400;
 
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -394,7 +438,6 @@ function compressImage(file, opts = {}) {
       const img = new Image();
       img.onerror = () => reject(new Error('Could not load image'));
       img.onload = () => {
-        // Compute scaled dimensions for the API image
         let { width, height } = img;
         if (width > maxDim || height > maxDim) {
           const ratio = Math.min(maxDim / width, maxDim / height);
@@ -402,7 +445,6 @@ function compressImage(file, opts = {}) {
           height = Math.round(height * ratio);
         }
 
-        // Compress with progressively lower quality until under maxBytes
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -413,7 +455,6 @@ function compressImage(file, opts = {}) {
 
         let quality = 0.85;
         let dataUrl = canvas.toDataURL('image/jpeg', quality);
-        // base64 → ~3/4 the byte length of the data string after the prefix
         const sizeFromDataUrl = (s) => Math.ceil((s.length - s.indexOf(',') - 1) * 0.75);
 
         while (sizeFromDataUrl(dataUrl) > maxBytes && quality > 0.3) {
@@ -421,7 +462,6 @@ function compressImage(file, opts = {}) {
           dataUrl = canvas.toDataURL('image/jpeg', quality);
         }
 
-        // If still too big, scale dimensions down further
         let scale = 1;
         while (sizeFromDataUrl(dataUrl) > maxBytes && scale > 0.4) {
           scale -= 0.15;
@@ -433,7 +473,6 @@ function compressImage(file, opts = {}) {
           dataUrl = canvas.toDataURL('image/jpeg', 0.7);
         }
 
-        // Build thumbnail
         const thumbCanvas = document.createElement('canvas');
         let tw = img.width, th = img.height;
         if (tw > thumbDim || th > thumbDim) {
@@ -448,13 +487,11 @@ function compressImage(file, opts = {}) {
         tctx.drawImage(img, 0, 0, tw, th);
         const thumbUrl = thumbCanvas.toDataURL('image/jpeg', 0.75);
 
-        const base64 = dataUrl.split(',')[1];
         resolve({
-          apiDataUrl: dataUrl,
-          base64,
+          preview: dataUrl,
+          base64: dataUrl.split(',')[1],
           mediaType: 'image/jpeg',
-          thumbnail: thumbUrl,
-          finalSize: sizeFromDataUrl(dataUrl)
+          thumbnail: thumbUrl
         });
       };
       img.src = e.target.result;
@@ -628,7 +665,7 @@ function renderDashboard() {
       <div class="empty-state">
         <div class="icon">📷</div>
         <div class="title">Tap + to scan your first comic</div>
-        <div class="sub">Build your inventory one book at a time.<br>Scanner identifies, prices, and recommends what to do.</div>
+        <div class="sub">Take 2 photos: cover + spine.<br>Scanner identifies, prices, and recommends what to do.</div>
       </div>
     `;
   } else {
@@ -659,7 +696,7 @@ function renderComicRow(comic) {
     ? `$${((comic.pricing.raw_value_low + comic.pricing.raw_value_high) / 2).toFixed(0)} raw`
     : 'Pricing pending';
   const statusBadge = statusToBadge(comic.status);
-  const thumb = comic.thumbnail || comic.image; // backwards compat
+  const thumb = comic.thumbnail || comic.image;
   return `
     <div class="comic-row" onclick="openDetail('${comic.id}')">
       <div class="comic-thumb">
@@ -775,38 +812,121 @@ function renderActions() {
   c.innerHTML = html;
 }
 
+// ============ SCAN FLOW ============
 function openScanModal() {
-  scanImage = null;
-  scanImageData = null;
+  scanState = { cover: null, spine: null, step: 'cover' };
   document.getElementById('scanModal').classList.add('active');
-  renderScanUpload();
+  renderScanStep();
 }
 
 function closeScanModal() {
   document.getElementById('scanModal').classList.remove('active');
 }
 
-function renderScanUpload() {
+function renderStepIndicator() {
+  const coverDone = scanState.cover ? 'done' : (scanState.step === 'cover' ? 'active' : '');
+  const spineDone = scanState.spine ? 'done' : (scanState.step === 'spine' ? 'active' : '');
+  const reviewActive = scanState.step === 'review' ? 'active' : '';
+  return `
+    <div class="photo-step-indicator">
+      <div class="step-pill ${coverDone}">1. Cover</div>
+      <div class="step-pill ${spineDone}">2. Spine</div>
+      <div class="step-pill ${reviewActive}">3. Scan</div>
+    </div>
+  `;
+}
+
+function renderScanStep() {
+  if (scanState.step === 'cover') renderCoverStep();
+  else if (scanState.step === 'spine') renderSpineStep();
+  else if (scanState.step === 'review') renderReviewStep();
+}
+
+function renderCoverStep() {
   document.getElementById('scanContent').innerHTML = `
-    <div class="modal-title">Scan a Comic</div>
-    <div class="modal-subtitle">Take a photo or upload a cover image</div>
-    <div class="upload-zone" onclick="document.getElementById('scanFile').click()">
+    <div class="modal-title">📚 Step 1: Cover Photo</div>
+    <div class="modal-subtitle">Take a clear photo of the front cover</div>
+    ${renderStepIndicator()}
+    <div class="photo-tip">
+      <div class="tip-label">💡 Tip</div>
+      <div class="tip-body">Lay the comic flat on a clean surface. Good lighting, no glare. Get the whole cover in frame including the price box and barcode.</div>
+    </div>
+    <div class="upload-zone" onclick="document.getElementById('coverFile').click()">
       <div class="icon">📚</div>
       <div class="label">Upload Cover Photo</div>
       <div class="sublabel">Tap to browse</div>
     </div>
-    <button class="btn-camera-modal" onclick="document.getElementById('scanCam').click()">📱 Take Photo with Camera</button>
-    <input type="file" accept="image/*" id="scanFile" style="display:none">
-    <input type="file" accept="image/*" capture="environment" id="scanCam" style="display:none">
+    <button class="btn-camera-modal" onclick="document.getElementById('coverCam').click()">📱 Take Photo with Camera</button>
+    <input type="file" accept="image/*" id="coverFile" style="display:none">
+    <input type="file" accept="image/*" capture="environment" id="coverCam" style="display:none">
   `;
-  document.getElementById('scanFile').onchange = (e) => handleScanFile(e.target.files[0]);
-  document.getElementById('scanCam').onchange = (e) => handleScanFile(e.target.files[0]);
+  document.getElementById('coverFile').onchange = (e) => handlePhoto(e.target.files[0], 'cover');
+  document.getElementById('coverCam').onchange = (e) => handlePhoto(e.target.files[0], 'cover');
 }
 
-async function handleScanFile(file) {
+function renderSpineStep() {
+  document.getElementById('scanContent').innerHTML = `
+    <div class="modal-title">📐 Step 2: Spine Photo</div>
+    <div class="modal-subtitle">This makes grading way more accurate</div>
+    ${renderStepIndicator()}
+    <div class="photo-tip">
+      <div class="tip-label">💡 Why the Spine Matters</div>
+      <div class="tip-body">A clean cover with a damaged spine grades much lower than it looks. Spine roll, ticks, and color breaks are the #1 reason comics fail to grade well. Hold the comic on its side and photograph the spine straight on.</div>
+    </div>
+    <div class="upload-zone" onclick="document.getElementById('spineFile').click()">
+      <div class="icon">📐</div>
+      <div class="label">Upload Spine Photo</div>
+      <div class="sublabel">Tap to browse</div>
+    </div>
+    <button class="btn-camera-modal" onclick="document.getElementById('spineCam').click()">📱 Take Photo with Camera</button>
+    <input type="file" accept="image/*" id="spineFile" style="display:none">
+    <input type="file" accept="image/*" capture="environment" id="spineCam" style="display:none">
+
+    <button class="skip-btn" style="width:100%; padding: 12px; margin-top: 8px;" onclick="skipSpine()">Skip — use cover only (less accurate grading)</button>
+  `;
+  document.getElementById('spineFile').onchange = (e) => handlePhoto(e.target.files[0], 'spine');
+  document.getElementById('spineCam').onchange = (e) => handlePhoto(e.target.files[0], 'spine');
+}
+
+function renderReviewStep() {
+  document.getElementById('scanContent').innerHTML = `
+    <div class="modal-title">🔍 Review & Scan</div>
+    <div class="modal-subtitle">Photos look good? Let's identify it.</div>
+    ${renderStepIndicator()}
+    <div class="photo-stack">
+      <div class="photo-row">
+        <div class="photo-mini"><img src="${scanState.cover.preview}"></div>
+        <div class="photo-info">
+          <div class="label">✓ Cover Photo</div>
+          <div class="sub">Front cover ready</div>
+        </div>
+        <button class="skip-btn" onclick="retakePhoto('cover')">Retake</button>
+      </div>
+      ${scanState.spine ? `
+      <div class="photo-row">
+        <div class="photo-mini"><img src="${scanState.spine.preview}"></div>
+        <div class="photo-info">
+          <div class="label">✓ Spine Photo</div>
+          <div class="sub">Spine ready</div>
+        </div>
+        <button class="skip-btn" onclick="retakePhoto('spine')">Retake</button>
+      </div>` : `
+      <div class="photo-row" style="opacity: 0.6">
+        <div class="photo-mini" style="display:flex;align-items:center;justify-content:center;font-size:24px;color:#475569">—</div>
+        <div class="photo-info">
+          <div class="label">Spine: skipped</div>
+          <div class="sub">Grade estimate will be less precise</div>
+        </div>
+        <button class="skip-btn" onclick="retakePhoto('spine')">Add it</button>
+      </div>`}
+    </div>
+    <button class="btn-primary" onclick="runScan()">⚡ Identify & Grade Comic</button>
+  `;
+}
+
+async function handlePhoto(file, type) {
   if (!file || !file.type.startsWith('image/')) return;
 
-  // Show loading state while compressing
   document.getElementById('scanContent').innerHTML = `
     <div class="modal-title">Processing photo...</div>
     <div class="spinner"></div>
@@ -815,41 +935,49 @@ async function handleScanFile(file) {
 
   try {
     const compressed = await compressImage(file);
-    scanImage = compressed.thumbnail;       // small version for inventory
-    scanImageData = {
-      base64: compressed.base64,
-      media_type: compressed.mediaType,
-      preview: compressed.apiDataUrl        // medium-quality preview for confirm screen
-    };
-    renderScanPreview();
+    scanState[type] = compressed;
+    if (type === 'cover') {
+      scanState.step = 'spine';
+    } else {
+      scanState.step = 'review';
+    }
+    renderScanStep();
   } catch (e) {
     document.getElementById('scanContent').innerHTML = `
       <div class="modal-title" style="color:#fca5a5">Photo Processing Failed</div>
       <div class="modal-subtitle">${e.message}</div>
-      <button class="btn-primary" onclick="renderScanUpload()" style="margin-top:16px">Try Again</button>
+      <button class="btn-primary" onclick="renderScanStep()" style="margin-top:16px">Try Again</button>
     `;
   }
 }
 
-function renderScanPreview() {
-  document.getElementById('scanContent').innerHTML = `
-    <div class="modal-title">Confirm & Scan</div>
-    <div class="modal-subtitle">Looks good? Identify this comic.</div>
-    <div class="detail-cover"><img src="${scanImageData.preview}"></div>
-    <div style="display:flex; gap:10px;">
-      <button class="action-btn" style="flex:1; justify-content:center" onclick="renderScanUpload()">← Back</button>
-      <button class="btn-primary" style="flex:2" onclick="runScan()">⚡ Identify Comic</button>
-    </div>
-  `;
+function skipSpine() {
+  scanState.step = 'review';
+  renderScanStep();
+}
+
+function retakePhoto(type) {
+  scanState[type] = null;
+  scanState.step = type;
+  renderScanStep();
 }
 
 async function runScan() {
   document.getElementById('scanContent').innerHTML = `
     <div class="modal-title">Scanning...</div>
     <div class="spinner"></div>
-    <div class="loading-text">Identifying issue, publisher, and condition</div>
+    <div class="loading-text">${scanState.spine ? 'Analyzing cover and spine condition' : 'Identifying issue and condition'}</div>
   `;
+
   try {
+    const content = [
+      { type: 'image', source: { type: 'base64', media_type: scanState.cover.mediaType, data: scanState.cover.base64 } }
+    ];
+    if (scanState.spine) {
+      content.push({ type: 'image', source: { type: 'base64', media_type: scanState.spine.mediaType, data: scanState.spine.base64 } });
+    }
+    content.push({ type: 'text', text: COMIC_PROMPT });
+
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -860,14 +988,8 @@ async function runScan() {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: scanImageData.media_type, data: scanImageData.base64 } },
-            { type: 'text', text: COMIC_PROMPT }
-          ]
-        }]
+        max_tokens: 1500,
+        messages: [{ role: 'user', content }]
       })
     });
     const data = await resp.json();
@@ -887,7 +1009,8 @@ async function runScan() {
     const id = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
     const comic = {
       id,
-      thumbnail: scanImage,
+      thumbnail: scanState.cover.thumbnail,
+      spine_thumbnail: scanState.spine ? scanState.spine.thumbnail : null,
       info,
       pricing,
       status: 'in_stock',
@@ -904,8 +1027,8 @@ async function runScan() {
     console.error(e);
     document.getElementById('scanContent').innerHTML = `
       <div class="modal-title" style="color:#fca5a5">Scan Failed</div>
-      <div class="modal-subtitle">${e.message || "Couldn't identify this comic. Try a clearer photo."}</div>
-      <button class="btn-primary" onclick="renderScanUpload()" style="margin-top:16px">Try Again</button>
+      <div class="modal-subtitle">${e.message || "Couldn't identify this comic. Try clearer photos."}</div>
+      <button class="btn-primary" onclick="scanState.step='review';renderScanStep();" style="margin-top:16px">Try Again</button>
     `;
   }
 }
@@ -963,9 +1086,18 @@ function renderDetail() {
   const rec = getRecommendation(comic);
   const recClass = `rec-${rec.type}`;
   const thumb = comic.thumbnail || comic.image;
+  const spineThumb = comic.spine_thumbnail;
 
   let html = `
     ${thumb ? `<div class="detail-cover"><img src="${thumb}"></div>` : ''}
+    ${spineThumb ? `
+      <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;padding:8px;background:rgba(30,41,59,0.4);border-radius:10px;border:1px solid #334155">
+        <div style="width:50px;height:80px;border-radius:6px;overflow:hidden;background:#0f172a">
+          <img src="${spineThumb}" style="width:100%;height:100%;object-fit:cover">
+        </div>
+        <div style="font-size:12px;color:#94a3b8">📐 Spine photo on file<br><span style="font-size:11px;color:#64748b">Improves grading accuracy</span></div>
+      </div>
+    ` : ''}
     <div class="detail-name">${comic.info.title}</div>
     <div class="detail-issue">${comic.info.issue_number}</div>
 
@@ -1007,6 +1139,10 @@ function renderDetail() {
 
   if (comic.info.notable_characters) {
     html += `<div class="info-box"><div class="label">🦸 Characters</div><div class="body">${comic.info.notable_characters}</div></div>`;
+  }
+
+  if (comic.info.spine_assessment && !comic.info.spine_assessment.includes('No spine')) {
+    html += `<div class="info-box" style="background:rgba(168,85,247,0.05);border-color:rgba(168,85,247,0.2)"><div class="label" style="color:#a855f7">📐 Spine Assessment</div><div class="body" style="color:#e9d5ff">${comic.info.spine_assessment}</div></div>`;
   }
 
   if (comic.info.condition_notes) {
