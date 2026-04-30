@@ -38,16 +38,9 @@
     font-family: 'Bangers', cursive; font-size: 32px; letter-spacing: 2px;
     text-align: center; color: #fff; margin-bottom: 4px;
   }
-  .setup-box .subtitle {
-    text-align: center; font-size: 13px; color: #64748b; margin-bottom: 24px;
-  }
-  .setup-box label {
-    display: block; font-size: 12px; font-weight: 700; color: #94a3b8;
-    margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;
-  }
-  .setup-box .hint {
-    font-size: 12px; color: #475569; margin-top: 8px; margin-bottom: 20px; line-height: 1.5;
-  }
+  .setup-box .subtitle { text-align: center; font-size: 13px; color: #64748b; margin-bottom: 24px; }
+  .setup-box label { display: block; font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .setup-box .hint { font-size: 12px; color: #475569; margin-top: 8px; margin-bottom: 20px; line-height: 1.5; }
   .setup-box .hint a { color: #e94560; text-decoration: none; }
   .btn-primary {
     width: 100%; padding: 15px; border-radius: 12px; border: none;
@@ -65,9 +58,7 @@
     position: sticky; top: 0; z-index: 50;
     display: flex; justify-content: space-between; align-items: center;
   }
-  .topbar-title {
-    font-family: 'Bangers', cursive; font-size: 22px; letter-spacing: 2px; color: #fff;
-  }
+  .topbar-title { font-family: 'Bangers', cursive; font-size: 22px; letter-spacing: 2px; color: #fff; }
   .topbar-actions { display: flex; gap: 8px; }
   .icon-btn {
     width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);
@@ -80,7 +71,7 @@
     position: sticky; top: 60px; z-index: 49;
   }
   .tab {
-    flex: 1; padding: 12px 4px; text-align: center; font-size: 13px;
+    flex: 1; padding: 12px 4px; text-align: center; font-size: 12px;
     font-weight: 800; border: none; background: transparent; color: #475569;
     border-bottom: 3px solid transparent; transition: all 0.2s;
   }
@@ -100,10 +91,7 @@
   .stat-value { font-size: 22px; font-weight: 900; color: #f1f5f9; }
   .stat-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
 
-  .section-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin: 20px 0 10px;
-  }
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px; }
   .section-title { font-size: 16px; font-weight: 800; color: #f1f5f9; }
 
   .fab {
@@ -135,6 +123,10 @@
     display: inline-block; white-space: nowrap;
   }
   .comic-value { font-size: 14px; font-weight: 900; color: #10b981; margin-top: 4px; }
+  .platform-badge {
+    padding: 2px 6px; border-radius: 5px; font-size: 10px; font-weight: 800;
+    display: inline-block; white-space: nowrap; margin-top: 2px;
+  }
 
   .empty-state { text-align: center; padding: 48px 24px; color: #64748b; }
   .empty-state .icon { font-size: 56px; margin-bottom: 16px; opacity: 0.5; }
@@ -163,9 +155,7 @@
     font-size: 18px; line-height: 1;
   }
 
-  .photo-step-indicator {
-    display: flex; gap: 8px; margin-bottom: 14px;
-  }
+  .photo-step-indicator { display: flex; gap: 8px; margin-bottom: 14px; }
   .step-pill {
     flex: 1; padding: 8px 10px; border-radius: 8px; text-align: center;
     font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
@@ -249,6 +239,14 @@
   .rec-unknown .rec-action { color: #cbd5e1; }
   .rec-reason { font-size: 13px; line-height: 1.5; opacity: 0.9; }
 
+  .platform-rec {
+    padding: 12px 14px; border-radius: 10px; margin-bottom: 14px;
+    background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.25);
+  }
+  .platform-rec .label { font-size: 11px; font-weight: 800; color: #60a5fa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .platform-rec .platform-name { font-size: 16px; font-weight: 900; color: #93c5fd; margin-bottom: 4px; }
+  .platform-rec .body { font-size: 12px; color: #bfdbfe; line-height: 1.5; }
+
   .info-box {
     padding: 12px 14px; border-radius: 10px; margin-bottom: 12px;
     background: rgba(30,41,59,0.6); border: 1px solid #334155;
@@ -308,6 +306,46 @@
     border: 1px solid #334155; background: transparent; color: #94a3b8; white-space: nowrap;
   }
   .filter-chip.active { border-color: #e94560; color: #e94560; background: rgba(233,69,96,0.1); }
+
+  /* Bundle styles */
+  .bundle-card {
+    padding: 14px; border-radius: 12px; margin-bottom: 12px; cursor: pointer;
+    background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(83,52,131,0.04));
+    border: 1px solid rgba(168,85,247,0.3);
+  }
+  .bundle-card:active { transform: scale(0.98); }
+  .bundle-type {
+    font-size: 10px; font-weight: 800; color: #c4b5fd; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .bundle-title { font-size: 16px; font-weight: 900; color: #f1f5f9; margin-bottom: 6px; }
+  .bundle-stats { display: flex; gap: 16px; margin-bottom: 8px; }
+  .bundle-stat-mini { font-size: 12px; color: #94a3b8; }
+  .bundle-stat-mini b { color: #f1f5f9; font-size: 14px; }
+  .bundle-thumbs { display: flex; gap: 4px; flex-wrap: wrap; }
+  .bundle-thumb { width: 30px; height: 45px; border-radius: 3px; overflow: hidden; background: #0f172a; }
+  .bundle-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .bundle-thumb.placeholder { display: flex; align-items: center; justify-content: center; font-size: 14px; color: #475569; }
+
+  .selectable-comic {
+    display: flex; gap: 10px; padding: 10px; border-radius: 8px;
+    background: rgba(30,41,59,0.4); border: 1px solid #334155;
+    align-items: center; margin-bottom: 6px; cursor: pointer;
+  }
+  .selectable-comic.selected { border-color: #a855f7; background: rgba(168,85,247,0.08); }
+  .selectable-checkbox {
+    width: 22px; height: 22px; border-radius: 5px;
+    border: 2px solid #475569; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 900;
+  }
+  .selectable-comic.selected .selectable-checkbox {
+    background: #a855f7; border-color: #a855f7;
+  }
+  .selectable-thumb { width: 36px; height: 50px; border-radius: 4px; overflow: hidden; background: #0f172a; }
+  .selectable-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .selectable-info { flex: 1; min-width: 0; }
+  .selectable-title { font-size: 13px; font-weight: 700; color: #e2e8f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .selectable-meta { font-size: 11px; color: #64748b; }
 </style>
 </head>
 <body>
@@ -315,7 +353,7 @@
 <div class="setup-screen" id="setupScreen">
   <div class="setup-box">
     <h1>COMIC HQ</h1>
-    <div class="subtitle">Inventory • Valuations • Listings</div>
+    <div class="subtitle">Inventory • Valuations • Bundles • Listings</div>
     <label>API Key</label>
     <input type="password" id="apiKeyInput" placeholder="sk-ant-..." autocomplete="off">
     <div class="hint">
@@ -335,8 +373,9 @@
   </div>
 
   <div class="tabbar">
-    <button class="tab active" id="tabDashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+    <button class="tab active" id="tabDashboard" onclick="switchTab('dashboard')">📊 Dash</button>
     <button class="tab" id="tabInventory" onclick="switchTab('inventory')">📚 Inventory</button>
+    <button class="tab" id="tabBundles" onclick="switchTab('bundles')">📦 Bundles</button>
     <button class="tab" id="tabActions" onclick="switchTab('actions')">⚡ Actions</button>
   </div>
 
@@ -345,43 +384,25 @@
   <button class="fab" onclick="openScanModal()" title="Scan New Comic">+</button>
 </div>
 
-<div class="modal-bg" id="scanModal">
-  <div class="modal" style="position: relative;">
-    <button class="modal-close" onclick="closeScanModal()">×</button>
-    <div class="modal-handle"></div>
-    <div id="scanContent"></div>
-  </div>
-</div>
+<div class="modal-bg" id="scanModal"><div class="modal" style="position: relative;"><button class="modal-close" onclick="closeScanModal()">×</button><div class="modal-handle"></div><div id="scanContent"></div></div></div>
 
-<div class="modal-bg" id="detailModal">
-  <div class="modal" style="position: relative;">
-    <button class="modal-close" onclick="closeDetailModal()">×</button>
-    <div class="modal-handle"></div>
-    <div id="detailContent"></div>
-  </div>
-</div>
+<div class="modal-bg" id="detailModal"><div class="modal" style="position: relative;"><button class="modal-close" onclick="closeDetailModal()">×</button><div class="modal-handle"></div><div id="detailContent"></div></div></div>
 
-<div class="modal-bg" id="listingModal">
-  <div class="modal" style="position: relative;">
-    <button class="modal-close" onclick="closeListingModal()">×</button>
-    <div class="modal-handle"></div>
-    <div id="listingContent"></div>
-  </div>
-</div>
+<div class="modal-bg" id="listingModal"><div class="modal" style="position: relative;"><button class="modal-close" onclick="closeListingModal()">×</button><div class="modal-handle"></div><div id="listingContent"></div></div></div>
+
+<div class="modal-bg" id="bundleModal"><div class="modal" style="position: relative;"><button class="modal-close" onclick="closeBundleModal()">×</button><div class="modal-handle"></div><div id="bundleContent"></div></div></div>
 
 <script>
 let apiKey = '';
 let inventory = [];
+let bundles = [];
 let currentTab = 'dashboard';
 let currentFilter = 'all';
 let detailComicId = null;
+let currentBundleId = null;
+let bundleBuilderState = { selectedIds: [], type: 'custom', title: '' };
 
-// Scan state — now supports cover + spine
-let scanState = {
-  cover: null,    // { thumbnail, base64, mediaType, preview }
-  spine: null,    // { thumbnail, base64, mediaType, preview }
-  step: 'cover'   // cover -> spine -> review -> scanning
-};
+let scanState = { cover: null, spine: null, step: 'cover' };
 
 const COMIC_PROMPT = `You are a comic book expert and CGC grading specialist. Analyze the provided photo(s) of a comic book.
 
@@ -392,10 +413,10 @@ You will receive 1 or 2 images:
 Use both images together for the most accurate grade assessment. The spine is critical for grading — a clean cover with a damaged spine grades much lower than its appearance suggests.
 
 Return ONLY valid JSON (no markdown, no backticks):
-{"title":"Full title","issue_number":"Issue number (e.g. #181)","publisher":"Publisher","year":"Year","era":"Golden/Silver/Bronze/Copper/Modern Age","cover_artist":"Artist or Unknown","key_issue":true/false,"key_issue_reason":"Why or N/A","notable_characters":"Major characters","variant":"Regular/variant/newsstand/direct","printing":"1st printing etc or Unknown","condition_notes":"Detailed condition notes covering BOTH cover and spine if both provided. Mention spine roll, spine ticks, color breaks, edge wear, corner wear, surface defects.","spine_assessment":"Specific spine condition observations, or 'No spine photo provided' if only cover sent","estimated_grade":"CGC range like 6.0-7.0 or 9.0-9.4","grade_label":"Poor/Fair/Good/Very Good/Fine/Very Fine/Near Mint/Mint","grade_confidence":"low/medium/high - your confidence in the grade estimate","confidence":"high/medium/low - confidence in the identification"}`;
+{"title":"Full title","issue_number":"Issue number (e.g. #181)","publisher":"Publisher","year":"Year","era":"Golden/Silver/Bronze/Copper/Modern Age","cover_artist":"Artist or Unknown","writer":"Writer or Unknown","story_arc":"Crossover/storyline name if part of one, e.g. 'Mutant Massacre', 'Fall of the Mutants', or N/A","key_issue":true/false,"key_issue_reason":"Why or N/A","notable_characters":"Major characters","variant":"Regular/variant/newsstand/direct","printing":"1st printing etc or Unknown","condition_notes":"Detailed condition notes covering BOTH cover and spine if both provided","spine_assessment":"Specific spine condition observations, or 'No spine photo provided' if only cover sent","estimated_grade":"CGC range like 6.0-7.0 or 9.0-9.4","grade_label":"Poor/Fair/Good/Very Good/Fine/Very Fine/Near Mint/Mint","grade_confidence":"low/medium/high","confidence":"high/medium/low"}`;
 
 function pricingPrompt(info) {
-  return `Search for current market prices for this comic book. Return ONLY a JSON object (no markdown, no commentary):
+  return `Search for current market prices for this comic book. Return ONLY a JSON object (no markdown):
 {"raw_value_low":number,"raw_value_high":number,"graded_value_92":number,"graded_value_98":number,"market_notes":"brief 1-2 sentence context","trending":"up/down/stable"}
 
 Where graded_value_92 and graded_value_98 are CGC graded values (or 0 if not gradable/worth grading).
@@ -410,7 +431,7 @@ Variant: ${info.variant}`;
 
 function listingPrompt(comic) {
   return `Generate an optimized listing for this comic book. Return ONLY valid JSON (no markdown):
-{"title":"eBay-optimized title (max 80 chars, key search terms)","description":"4-6 sentence description with condition, key features, what makes it desirable","price_suggestion":number,"keywords":"comma separated SEO tags","shipping_notes":"brief shipping recommendation"}
+{"title":"eBay-optimized title (max 80 chars)","description":"4-6 sentence description","price_suggestion":number,"keywords":"comma separated SEO tags","shipping_notes":"brief shipping recommendation"}
 
 Comic: ${comic.info.title} ${comic.info.issue_number}
 Publisher: ${comic.info.publisher}
@@ -423,6 +444,23 @@ Cover Artist: ${comic.info.cover_artist}
 Variant: ${comic.info.variant}
 Condition Notes: ${comic.info.condition_notes}
 Market Range: $${comic.pricing?.raw_value_low || '?'} - $${comic.pricing?.raw_value_high || '?'} raw`;
+}
+
+function bundleListingPrompt(bundle, comics) {
+  const comicList = comics.map(c => `- ${c.info.title} ${c.info.issue_number} (${c.info.year})`).join('\n');
+  const totalRaw = comics.reduce((s,c) => s + ((c.pricing?.raw_value_low || 0) + (c.pricing?.raw_value_high || 0)) / 2, 0);
+
+  return `Generate an optimized eBay/Mercari listing for this comic book BUNDLE. Return ONLY valid JSON (no markdown):
+{"title":"Listing title (max 80 chars, use 'LOT' or 'RUN' keyword)","description":"5-7 sentences. Highlight what's included, the era, condition range, why this bundle is valuable","price_suggestion":number,"keywords":"comma separated SEO tags","shipping_notes":"shipping recommendation for a bundle"}
+
+Bundle Type: ${bundle.type}
+Bundle Theme: ${bundle.title}
+Number of Comics: ${comics.length}
+Sum of individual values: $${totalRaw.toFixed(0)}
+Suggested bundle price target: $${(totalRaw * 0.65).toFixed(0)} (about 65% of individual sum)
+
+Comics included:
+${comicList}`;
 }
 
 // ============ IMAGE COMPRESSION ============
@@ -444,55 +482,40 @@ function compressImage(file, opts = {}) {
           width = Math.round(width * ratio);
           height = Math.round(height * ratio);
         }
-
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = width; canvas.height = height;
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, width, height);
         ctx.drawImage(img, 0, 0, width, height);
 
         let quality = 0.85;
         let dataUrl = canvas.toDataURL('image/jpeg', quality);
         const sizeFromDataUrl = (s) => Math.ceil((s.length - s.indexOf(',') - 1) * 0.75);
-
         while (sizeFromDataUrl(dataUrl) > maxBytes && quality > 0.3) {
           quality -= 0.1;
           dataUrl = canvas.toDataURL('image/jpeg', quality);
         }
-
         let scale = 1;
         while (sizeFromDataUrl(dataUrl) > maxBytes && scale > 0.4) {
           scale -= 0.15;
-          canvas.width = Math.round(width * scale);
-          canvas.height = Math.round(height * scale);
-          ctx.fillStyle = '#fff';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          canvas.width = Math.round(width * scale); canvas.height = Math.round(height * scale);
+          ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           dataUrl = canvas.toDataURL('image/jpeg', 0.7);
         }
-
         const thumbCanvas = document.createElement('canvas');
         let tw = img.width, th = img.height;
         if (tw > thumbDim || th > thumbDim) {
           const r = Math.min(thumbDim / tw, thumbDim / th);
           tw = Math.round(tw * r); th = Math.round(th * r);
         }
-        thumbCanvas.width = tw;
-        thumbCanvas.height = th;
+        thumbCanvas.width = tw; thumbCanvas.height = th;
         const tctx = thumbCanvas.getContext('2d');
-        tctx.fillStyle = '#fff';
-        tctx.fillRect(0, 0, tw, th);
+        tctx.fillStyle = '#fff'; tctx.fillRect(0, 0, tw, th);
         tctx.drawImage(img, 0, 0, tw, th);
         const thumbUrl = thumbCanvas.toDataURL('image/jpeg', 0.75);
 
-        resolve({
-          preview: dataUrl,
-          base64: dataUrl.split(',')[1],
-          mediaType: 'image/jpeg',
-          thumbnail: thumbUrl
-        });
+        resolve({ preview: dataUrl, base64: dataUrl.split(',')[1], mediaType: 'image/jpeg', thumbnail: thumbUrl });
       };
       img.src = e.target.result;
     };
@@ -503,13 +526,11 @@ function compressImage(file, opts = {}) {
 function init() {
   const stored = localStorage.getItem('comichq_api_key');
   const inv = localStorage.getItem('comichq_inventory');
+  const bn = localStorage.getItem('comichq_bundles');
   if (inv) try { inventory = JSON.parse(inv); } catch(e) { inventory = []; }
-  if (stored) {
-    apiKey = stored;
-    showApp();
-  } else {
-    document.getElementById('setupScreen').style.display = 'flex';
-  }
+  if (bn) try { bundles = JSON.parse(bn); } catch(e) { bundles = []; }
+  if (stored) { apiKey = stored; showApp(); }
+  else { document.getElementById('setupScreen').style.display = 'flex'; }
 
   const input = document.getElementById('apiKeyInput');
   const btn = document.getElementById('saveKeyBtn');
@@ -535,23 +556,72 @@ function showSettings() {
 }
 
 function saveInventory() {
-  try {
-    localStorage.setItem('comichq_inventory', JSON.stringify(inventory));
-  } catch (e) {
-    alert('Storage is getting full. Consider exporting and clearing some old comics.');
-  }
+  try { localStorage.setItem('comichq_inventory', JSON.stringify(inventory)); }
+  catch (e) { alert('Storage is getting full. Consider exporting and clearing some old comics.'); }
+}
+function saveBundles() {
+  try { localStorage.setItem('comichq_bundles', JSON.stringify(bundles)); }
+  catch (e) {}
 }
 
 function switchTab(tab) {
   currentTab = tab;
-  document.getElementById('tabDashboard').classList.toggle('active', tab === 'dashboard');
-  document.getElementById('tabInventory').classList.toggle('active', tab === 'inventory');
-  document.getElementById('tabActions').classList.toggle('active', tab === 'actions');
+  ['dashboard','inventory','bundles','actions'].forEach(t => {
+    const el = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (el) el.classList.toggle('active', tab === t);
+  });
   if (tab === 'dashboard') renderDashboard();
   else if (tab === 'inventory') renderInventory();
+  else if (tab === 'bundles') renderBundlesTab();
   else renderActions();
 }
 
+// ============ PLATFORM RECOMMENDATION ============
+function getPlatformRec(comic) {
+  const p = comic.pricing;
+  if (!p || (p.raw_value_high === 0 && p.raw_value_low === 0)) {
+    return { primary: 'TBD', color: '#94a3b8', reasoning: 'Run pricing first' };
+  }
+  const rawMid = (p.raw_value_low + p.raw_value_high) / 2;
+  const grade = (comic.info.grade_label || '').toLowerCase();
+  const isStrongCondition = grade.includes('near mint') || grade.includes('mint') || grade.includes('very fine');
+
+  if (rawMid >= 200) {
+    return {
+      primary: 'eBay Auction',
+      color: '#10b981',
+      reasoning: 'High-value books need eBay\'s collector audience. Use auction format ending Sunday 7-9pm ET. Consider consignment with a known seller for $500+ books.'
+    };
+  }
+  if (rawMid >= 50 || (comic.info.key_issue && rawMid >= 20)) {
+    return {
+      primary: 'eBay (Buy It Now + Best Offer)',
+      color: '#10b981',
+      reasoning: 'Mid-tier and key issues do best on eBay where serious collectors search. List with Best Offer enabled to capture negotiating buyers.'
+    };
+  }
+  if (rawMid >= 10) {
+    return {
+      primary: 'eBay or Mercari',
+      color: '#3b82f6',
+      reasoning: 'Either platform works at this tier. eBay has more comic-specific buyers; Mercari has lower fees (~10% vs 13%) but less collector focus.'
+    };
+  }
+  if (rawMid >= 5) {
+    return {
+      primary: 'Mercari (or bundle)',
+      color: '#a855f7',
+      reasoning: 'Marginal as a single. Mercari\'s casual buyers may pay; otherwise group with similar comics into a bundle for better margins.'
+    };
+  }
+  return {
+    primary: 'Bundle Only',
+    color: '#64748b',
+    reasoning: 'Not worth listing individually — fees and shipping eat the margin. Group into a 25-50 issue lot.'
+  };
+}
+
+// ============ RECOMMENDATION LOGIC ============
 function getRecommendation(comic) {
   const p = comic.pricing;
   if (!p || (p.raw_value_high === 0 && p.raw_value_low === 0)) {
@@ -567,11 +637,8 @@ function getRecommendation(comic) {
   const isStrongCondition = grade.toLowerCase().includes('near mint') || grade.toLowerCase().includes('mint') || grade.toLowerCase().includes('very fine');
 
   if (rawMid < 5) {
-    return {
-      type: 'bulk',
-      action: 'Bundle in a Bulk Lot',
-      reason: `Raw value (~$${rawMid.toFixed(0)}) is too low to list individually. Group with similar comics into a 25-50 issue lot.`
-    };
+    return { type: 'bulk', action: 'Bundle in a Bulk Lot',
+      reason: `Raw value (~$${rawMid.toFixed(0)}) is too low to list individually. Group with similar comics into a 25-50 issue lot.` };
   }
 
   const expectedGradedValue = grade98 * 0.2 + grade92 * 0.5 + rawMid * 0.3;
@@ -579,21 +646,14 @@ function getRecommendation(comic) {
   const gradedSpread = gradedNetExpected - rawMid;
 
   if (isStrongCondition && grade98 > 0 && gradedSpread > rawMid && grade98 >= 100) {
-    return {
-      type: 'grade',
-      action: 'Submit for CGC Grading',
-      reason: `Strong condition + meaningful spread. Raw mid: $${rawMid.toFixed(0)}, expected graded value: ~$${expectedGradedValue.toFixed(0)}. After ~$35 grading cost, expected upside is ~$${gradedSpread.toFixed(0)}.`
-    };
+    return { type: 'grade', action: 'Submit for CGC Grading',
+      reason: `Strong condition + meaningful spread. Raw mid: $${rawMid.toFixed(0)}, expected graded value: ~$${expectedGradedValue.toFixed(0)}. After ~$35 grading cost, expected upside is ~$${gradedSpread.toFixed(0)}.` };
   }
 
   if (rawMid >= 5) {
-    return {
-      type: 'sell',
-      action: 'Sell Raw',
-      reason: `Estimated value $${p.raw_value_low}-$${p.raw_value_high}. ${comic.info.key_issue ? 'Key issue gives extra search demand. ' : ''}List at $${(p.raw_value_high * 0.95).toFixed(0)} or accept best offers above $${p.raw_value_low}.`
-    };
+    return { type: 'sell', action: 'Sell Raw',
+      reason: `Estimated value $${p.raw_value_low}-$${p.raw_value_high}. ${comic.info.key_issue ? 'Key issue gives extra search demand. ' : ''}List at $${(p.raw_value_high * 0.95).toFixed(0)} or accept best offers above $${p.raw_value_low}.` };
   }
-
   return { type: 'skip', action: 'Pass', reason: 'Not worth the listing time.' };
 }
 
@@ -612,12 +672,147 @@ function statusToBadge(status) {
     'listed': { label: 'Listed', color: '#a855f7' },
     'grading': { label: 'At CGC', color: '#fbbf24' },
     'sold': { label: 'Sold', color: '#10b981' },
-    'bulk': { label: 'In Bulk Lot', color: '#64748b' }
+    'bulk': { label: 'In Bulk Lot', color: '#64748b' },
+    'in_bundle': { label: 'In Bundle', color: '#a855f7' }
   };
   const m = map[status] || map['in_stock'];
   return `<span class="badge" style="background:${m.color}22;color:${m.color}">${m.label}</span>`;
 }
 
+// ============ BUNDLE DETECTION ============
+function detectBundles() {
+  // Only consider in_stock comics for bundling, skip listed/sold/grading/in_bundle
+  const available = inventory.filter(c => c.status === 'in_stock' && c.info);
+  const suggestions = [];
+
+  // 1. Run lots — same series, consecutive or near-consecutive issues
+  const bySeries = {};
+  available.forEach(c => {
+    const key = (c.info.title || '').toLowerCase().trim();
+    if (!key) return;
+    if (!bySeries[key]) bySeries[key] = [];
+    bySeries[key].push(c);
+  });
+
+  Object.entries(bySeries).forEach(([series, comics]) => {
+    if (comics.length >= 3) {
+      // Sort by issue number
+      const parsed = comics.map(c => ({
+        ...c,
+        issueNum: parseInt((c.info.issue_number || '').replace(/\D/g, '')) || 0
+      })).sort((a,b) => a.issueNum - b.issueNum);
+
+      const lowIssue = parsed[0].issueNum;
+      const highIssue = parsed[parsed.length - 1].issueNum;
+      const seriesTitle = comics[0].info.title;
+
+      suggestions.push({
+        id: 'sug_run_' + series.replace(/\s/g, '_'),
+        type: 'Run Lot',
+        title: `${seriesTitle} #${lowIssue}-${highIssue}`,
+        description: `${comics.length} consecutive issues from ${seriesTitle}`,
+        comicIds: parsed.map(c => c.id),
+        comicCount: comics.length
+      });
+    }
+  });
+
+  // 2. Story arc lots
+  const byStoryArc = {};
+  available.forEach(c => {
+    const arc = (c.info.story_arc || '').trim();
+    if (!arc || arc.toLowerCase() === 'n/a' || arc.toLowerCase() === 'none') return;
+    if (!byStoryArc[arc]) byStoryArc[arc] = [];
+    byStoryArc[arc].push(c);
+  });
+
+  Object.entries(byStoryArc).forEach(([arc, comics]) => {
+    if (comics.length >= 2) {
+      suggestions.push({
+        id: 'sug_arc_' + arc.replace(/\s/g, '_'),
+        type: 'Story Arc Lot',
+        title: `${arc} — ${comics.length} issue lot`,
+        description: `${comics.length} comics from the ${arc} crossover/storyline`,
+        comicIds: comics.map(c => c.id),
+        comicCount: comics.length
+      });
+    }
+  });
+
+  // 3. Creator lots — same writer or cover artist
+  const byCreator = {};
+  available.forEach(c => {
+    const writer = (c.info.writer || '').trim();
+    const artist = (c.info.cover_artist || '').trim();
+    [writer, artist].forEach(creator => {
+      if (!creator || creator.toLowerCase() === 'unknown' || creator.toLowerCase() === 'n/a') return;
+      if (!byCreator[creator]) byCreator[creator] = new Set();
+      byCreator[creator].add(c.id);
+    });
+  });
+
+  Object.entries(byCreator).forEach(([creator, idSet]) => {
+    if (idSet.size >= 4) {
+      const ids = Array.from(idSet);
+      const comics = inventory.filter(c => ids.includes(c.id));
+      suggestions.push({
+        id: 'sug_creator_' + creator.replace(/\s/g, '_'),
+        type: 'Creator Lot',
+        title: `${creator} comics — ${comics.length} issue lot`,
+        description: `${comics.length} comics by ${creator}`,
+        comicIds: ids,
+        comicCount: comics.length
+      });
+    }
+  });
+
+  // 4. Character lots — same primary characters
+  const byCharacter = {};
+  available.forEach(c => {
+    const chars = (c.info.notable_characters || '').split(/[,/&]/).map(s => s.trim()).filter(Boolean);
+    chars.forEach(char => {
+      if (!char || char.length < 3) return;
+      if (!byCharacter[char]) byCharacter[char] = new Set();
+      byCharacter[char].add(c.id);
+    });
+  });
+
+  Object.entries(byCharacter).forEach(([char, idSet]) => {
+    if (idSet.size >= 5) {
+      const ids = Array.from(idSet);
+      // Skip if these comics are mostly already covered by a run lot
+      suggestions.push({
+        id: 'sug_char_' + char.replace(/\s/g, '_'),
+        type: 'Character Lot',
+        title: `${char} appearances — ${idSet.size} issue lot`,
+        description: `${idSet.size} comics featuring ${char}`,
+        comicIds: ids,
+        comicCount: idSet.size
+      });
+    }
+  });
+
+  // 5. Reader/grab bag — leftover low-value comics
+  const lowValue = available.filter(c => {
+    const p = c.pricing;
+    if (!p) return false;
+    return ((p.raw_value_low + p.raw_value_high) / 2) < 5;
+  });
+  if (lowValue.length >= 10) {
+    suggestions.push({
+      id: 'sug_grab_bag',
+      type: 'Reader Lot',
+      title: `${lowValue.length}-comic Reader Lot`,
+      description: `Volume bundle of low-tier comics — sells fast at $0.50-$1/comic`,
+      comicIds: lowValue.map(c => c.id),
+      comicCount: lowValue.length
+    });
+  }
+
+  return suggestions;
+}
+
+// ============ DASHBOARD ============
 function renderDashboard() {
   const c = document.getElementById('content');
 
@@ -634,61 +829,53 @@ function renderDashboard() {
   const recommendations = inventory.filter(c => c.pricing).map(c => ({...c, rec: getRecommendation(c)}));
   const toGrade = recommendations.filter(c => c.rec.type === 'grade' && c.status === 'in_stock').slice(0, 3);
   const toSell = recommendations.filter(c => c.rec.type === 'sell' && c.status === 'in_stock').slice(0, 3);
+  const bundleSuggestions = detectBundles().slice(0, 3);
 
   let html = `
     <div class="stats-grid">
-      <div class="stat-card highlight">
-        <div class="stat-label">📚 Total Comics</div>
-        <div class="stat-value">${total}</div>
-        <div class="stat-sub">${keyIssues} key issues</div>
-      </div>
-      <div class="stat-card success">
-        <div class="stat-label">💰 Est. Box Value</div>
-        <div class="stat-value">$${totalValue.toFixed(0)}</div>
-        <div class="stat-sub">at estimated grades</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">📤 Listed</div>
-        <div class="stat-value">${listed}</div>
-        <div class="stat-sub">currently for sale</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">✅ Sold</div>
-        <div class="stat-value">${sold}</div>
-        <div class="stat-sub">$${soldRevenue.toFixed(0)} revenue</div>
-      </div>
+      <div class="stat-card highlight"><div class="stat-label">📚 Total Comics</div><div class="stat-value">${total}</div><div class="stat-sub">${keyIssues} key issues</div></div>
+      <div class="stat-card success"><div class="stat-label">💰 Est. Box Value</div><div class="stat-value">$${totalValue.toFixed(0)}</div><div class="stat-sub">at estimated grades</div></div>
+      <div class="stat-card"><div class="stat-label">📤 Listed</div><div class="stat-value">${listed}</div><div class="stat-sub">currently for sale</div></div>
+      <div class="stat-card"><div class="stat-label">✅ Sold</div><div class="stat-value">${sold}</div><div class="stat-sub">$${soldRevenue.toFixed(0)} revenue</div></div>
     </div>
   `;
 
   if (total === 0) {
-    html += `
-      <div class="empty-state">
-        <div class="icon">📷</div>
-        <div class="title">Tap + to scan your first comic</div>
-        <div class="sub">Take 2 photos: cover + spine.<br>Scanner identifies, prices, and recommends what to do.</div>
-      </div>
-    `;
+    html += `<div class="empty-state"><div class="icon">📷</div><div class="title">Tap + to scan your first comic</div><div class="sub">Take 2 photos: cover + spine.<br>Scanner identifies, prices, and recommends what to do.</div></div>`;
   } else {
     if (toGrade.length > 0) {
-      html += `<div class="section-header"><div class="section-title">🏆 Send for Grading</div></div>`;
-      html += '<div class="comic-list">';
+      html += `<div class="section-header"><div class="section-title">🏆 Send for Grading</div></div><div class="comic-list">`;
       toGrade.forEach(comic => html += renderComicRow(comic));
       html += '</div>';
     }
-
     if (toSell.length > 0) {
-      html += `<div class="section-header"><div class="section-title">💸 Ready to List</div></div>`;
-      html += '<div class="comic-list">';
+      html += `<div class="section-header"><div class="section-title">💸 Ready to List</div></div><div class="comic-list">`;
       toSell.forEach(comic => html += renderComicRow(comic));
       html += '</div>';
     }
-
-    if (toGrade.length === 0 && toSell.length === 0 && total > 0) {
-      html += `<div class="empty-state"><div class="title">Scan more or refresh pricing</div><div class="sub">Recommendations will appear here once comics have pricing data.</div></div>`;
+    if (bundleSuggestions.length > 0) {
+      html += `<div class="section-header"><div class="section-title">📦 Suggested Bundles</div><button class="copy-btn" onclick="switchTab('bundles')">View all →</button></div>`;
+      bundleSuggestions.forEach(b => html += renderBundleSuggestionMini(b));
     }
   }
-
   c.innerHTML = html;
+}
+
+function renderBundleSuggestionMini(s) {
+  const comics = inventory.filter(c => s.comicIds.includes(c.id));
+  const totalValue = comics.reduce((sum, c) => sum + ((c.pricing?.raw_value_low || 0) + (c.pricing?.raw_value_high || 0)) / 2, 0);
+  const thumbs = comics.slice(0, 6).map(c => c.thumbnail ? `<div class="bundle-thumb"><img src="${c.thumbnail}"></div>` : `<div class="bundle-thumb placeholder">📚</div>`).join('');
+  return `
+    <div class="bundle-card" onclick="openBundleSuggestion('${s.id}')">
+      <div class="bundle-type">${s.type}</div>
+      <div class="bundle-title">${s.title}</div>
+      <div class="bundle-stats">
+        <div class="bundle-stat-mini"><b>${s.comicCount}</b> comics</div>
+        <div class="bundle-stat-mini">~<b>$${(totalValue * 0.65).toFixed(0)}</b> bundle target</div>
+      </div>
+      <div class="bundle-thumbs">${thumbs}${comics.length > 6 ? `<div class="bundle-thumb placeholder">+${comics.length-6}</div>` : ''}</div>
+    </div>
+  `;
 }
 
 function renderComicRow(comic) {
@@ -697,11 +884,10 @@ function renderComicRow(comic) {
     : 'Pricing pending';
   const statusBadge = statusToBadge(comic.status);
   const thumb = comic.thumbnail || comic.image;
+  const platformRec = getPlatformRec(comic);
   return `
     <div class="comic-row" onclick="openDetail('${comic.id}')">
-      <div class="comic-thumb">
-        ${thumb ? `<img src="${thumb}">` : `<div class="placeholder">📚</div>`}
-      </div>
+      <div class="comic-thumb">${thumb ? `<img src="${thumb}">` : `<div class="placeholder">📚</div>`}</div>
       <div class="comic-info">
         <div class="comic-title">${comic.info?.title || 'Unknown Comic'}</div>
         <div class="comic-issue">${comic.info?.issue_number || ''}</div>
@@ -710,7 +896,7 @@ function renderComicRow(comic) {
           ${comic.info?.key_issue ? '<span class="badge" style="background:rgba(251,191,36,0.15);color:#fbbf24">🔑 KEY</span>' : ''}
           ${comic.info?.grade_label ? `<span class="badge" style="background:rgba(100,116,139,0.2);color:#cbd5e1">${comic.info.grade_label}</span>` : ''}
         </div>
-        <div class="comic-value">${value}</div>
+        <div class="comic-value">${value} <span class="platform-badge" style="background:${platformRec.color}22;color:${platformRec.color};margin-left:6px">${platformRec.primary}</span></div>
       </div>
     </div>
   `;
@@ -718,25 +904,25 @@ function renderComicRow(comic) {
 
 function renderInventory() {
   const c = document.getElementById('content');
-
   let filtered = inventory;
   if (currentFilter === 'in_stock') filtered = inventory.filter(c => c.status === 'in_stock');
   else if (currentFilter === 'listed') filtered = inventory.filter(c => c.status === 'listed');
   else if (currentFilter === 'grading') filtered = inventory.filter(c => c.status === 'grading');
   else if (currentFilter === 'sold') filtered = inventory.filter(c => c.status === 'sold');
   else if (currentFilter === 'key') filtered = inventory.filter(c => c.info?.key_issue);
+  else if (currentFilter === 'in_bundle') filtered = inventory.filter(c => c.status === 'in_bundle');
 
   let html = `
     <div class="filter-bar">
       <button class="filter-chip ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">All (${inventory.length})</button>
       <button class="filter-chip ${currentFilter==='in_stock'?'active':''}" onclick="setFilter('in_stock')">In Stock</button>
       <button class="filter-chip ${currentFilter==='listed'?'active':''}" onclick="setFilter('listed')">Listed</button>
+      <button class="filter-chip ${currentFilter==='in_bundle'?'active':''}" onclick="setFilter('in_bundle')">In Bundle</button>
       <button class="filter-chip ${currentFilter==='grading'?'active':''}" onclick="setFilter('grading')">At CGC</button>
       <button class="filter-chip ${currentFilter==='sold'?'active':''}" onclick="setFilter('sold')">Sold</button>
       <button class="filter-chip ${currentFilter==='key'?'active':''}" onclick="setFilter('key')">🔑 Keys</button>
     </div>
   `;
-
   if (filtered.length === 0) {
     html += `<div class="empty-state"><div class="icon">📭</div><div class="title">No comics here yet</div><div class="sub">Tap + to scan and add comics.</div></div>`;
   } else {
@@ -744,15 +930,65 @@ function renderInventory() {
     filtered.forEach(comic => html += renderComicRow(comic));
     html += '</div>';
   }
+  c.innerHTML = html;
+}
+
+function setFilter(f) { currentFilter = f; renderInventory(); }
+
+// ============ BUNDLES TAB ============
+function renderBundlesTab() {
+  const c = document.getElementById('content');
+  const suggestions = detectBundles();
+  const myBundles = bundles;
+
+  let html = `
+    <div class="section-header"><div class="section-title">📦 Your Bundles</div>
+      <button class="copy-btn" onclick="openCustomBundleBuilder()">+ Custom</button>
+    </div>
+  `;
+
+  if (myBundles.length === 0) {
+    html += `<div class="empty-state" style="padding: 24px"><div class="sub">No bundles yet. Create one from suggestions below or build a custom bundle.</div></div>`;
+  } else {
+    myBundles.forEach(b => html += renderSavedBundle(b));
+  }
+
+  html += `<div class="section-header"><div class="section-title">💡 Suggested Bundles</div></div>`;
+  if (suggestions.length === 0) {
+    html += `<div class="empty-state" style="padding:24px"><div class="sub">No suggestions yet. Add more comics or run pricing to get bundle ideas.</div></div>`;
+  } else {
+    suggestions.forEach(s => html += renderBundleSuggestionMini(s));
+  }
 
   c.innerHTML = html;
 }
 
-function setFilter(f) {
-  currentFilter = f;
-  renderInventory();
+function renderSavedBundle(bundle) {
+  const comics = inventory.filter(c => bundle.comicIds.includes(c.id));
+  const totalValue = comics.reduce((sum, c) => sum + ((c.pricing?.raw_value_low || 0) + (c.pricing?.raw_value_high || 0)) / 2, 0);
+  const thumbs = comics.slice(0, 6).map(c => c.thumbnail ? `<div class="bundle-thumb"><img src="${c.thumbnail}"></div>` : `<div class="bundle-thumb placeholder">📚</div>`).join('');
+  const statusBadge = bundle.status === 'listed'
+    ? `<span class="badge" style="background:rgba(168,85,247,0.2);color:#a855f7">Listed</span>`
+    : bundle.status === 'sold'
+    ? `<span class="badge" style="background:rgba(16,185,129,0.2);color:#10b981">Sold</span>`
+    : `<span class="badge" style="background:rgba(59,130,246,0.2);color:#3b82f6">Draft</span>`;
+  return `
+    <div class="bundle-card" onclick="openSavedBundle('${bundle.id}')">
+      <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 4px">
+        <div class="bundle-type">${bundle.type}</div>
+        ${statusBadge}
+      </div>
+      <div class="bundle-title">${bundle.title}</div>
+      <div class="bundle-stats">
+        <div class="bundle-stat-mini"><b>${comics.length}</b> comics</div>
+        <div class="bundle-stat-mini"><b>$${bundle.price || (totalValue * 0.65).toFixed(0)}</b> ${bundle.price ? 'set price' : 'suggested'}</div>
+      </div>
+      <div class="bundle-thumbs">${thumbs}${comics.length > 6 ? `<div class="bundle-thumb placeholder">+${comics.length-6}</div>` : ''}</div>
+    </div>
+  `;
 }
 
+// ============ ACTIONS ============
 function renderActions() {
   const c = document.getElementById('content');
   const recs = inventory.filter(c => c.pricing && c.status === 'in_stock').map(c => ({...c, rec: getRecommendation(c)}));
@@ -767,24 +1003,9 @@ function renderActions() {
 
   let html = `
     <div class="section-header"><div class="section-title">⚡ Recommended Actions</div></div>
-
-    <div class="stat-card" style="margin-bottom: 12px;">
-      <div class="stat-label">🏆 Send for Grading</div>
-      <div class="stat-value">${grade.length} comics</div>
-      <div class="stat-sub">~$${totalGradeValue.toFixed(0)} expected graded value (cost ~$${(grade.length * 35).toFixed(0)})</div>
-    </div>
-
-    <div class="stat-card" style="margin-bottom: 12px;">
-      <div class="stat-label">💸 List for Raw Sale</div>
-      <div class="stat-value">${sell.length} comics</div>
-      <div class="stat-sub">~$${totalSellValue.toFixed(0)} estimated revenue</div>
-    </div>
-
-    <div class="stat-card" style="margin-bottom: 12px;">
-      <div class="stat-label">📦 Bundle into Bulk Lots</div>
-      <div class="stat-value">${bulk.length} comics</div>
-      <div class="stat-sub">~$${totalBulkValue.toFixed(0)} value (group as themed lots)</div>
-    </div>
+    <div class="stat-card" style="margin-bottom:12px"><div class="stat-label">🏆 Send for Grading</div><div class="stat-value">${grade.length} comics</div><div class="stat-sub">~$${totalGradeValue.toFixed(0)} expected graded value (cost ~$${(grade.length * 35).toFixed(0)})</div></div>
+    <div class="stat-card" style="margin-bottom:12px"><div class="stat-label">💸 List for Raw Sale</div><div class="stat-value">${sell.length} comics</div><div class="stat-sub">~$${totalSellValue.toFixed(0)} estimated revenue</div></div>
+    <div class="stat-card" style="margin-bottom:12px"><div class="stat-label">📦 Bundle into Lots</div><div class="stat-value">${bulk.length} comics</div><div class="stat-sub">~$${(totalBulkValue * 0.65).toFixed(0)} target bundle revenue (~65% of single sum)</div></div>
   `;
 
   if (grade.length > 0) {
@@ -792,24 +1013,377 @@ function renderActions() {
     grade.forEach(comic => html += renderComicRow(comic));
     html += '</div>';
   }
-
   if (sell.length > 0) {
     html += `<div class="section-header"><div class="section-title">💸 Ready to List</div></div><div class="comic-list">`;
     sell.forEach(comic => html += renderComicRow(comic));
     html += '</div>';
   }
-
   if (bulk.length > 0) {
-    html += `<div class="section-header"><div class="section-title">📦 Bulk Lot Material</div></div><div class="comic-list">`;
+    html += `<div class="section-header"><div class="section-title">📦 Bundle Material</div><button class="copy-btn" onclick="switchTab('bundles')">Build →</button></div><div class="comic-list">`;
     bulk.forEach(comic => html += renderComicRow(comic));
     html += '</div>';
   }
-
   if (recs.length === 0) {
     html += `<div class="empty-state"><div class="icon">📊</div><div class="title">No recommendations yet</div><div class="sub">Scan comics and run pricing to see what to sell, grade, or bundle.</div></div>`;
   }
-
   c.innerHTML = html;
+}
+
+// ============ BUNDLE MODAL ============
+function openBundleSuggestion(suggestionId) {
+  const suggestions = detectBundles();
+  const s = suggestions.find(x => x.id === suggestionId);
+  if (!s) return;
+  bundleBuilderState = {
+    selectedIds: [...s.comicIds],
+    type: s.type,
+    title: s.title,
+    fromSuggestion: true
+  };
+  document.getElementById('bundleModal').classList.add('active');
+  renderBundleBuilder();
+}
+
+function openCustomBundleBuilder() {
+  bundleBuilderState = { selectedIds: [], type: 'Custom', title: '', fromSuggestion: false };
+  document.getElementById('bundleModal').classList.add('active');
+  renderBundleBuilder();
+}
+
+function openSavedBundle(bundleId) {
+  currentBundleId = bundleId;
+  document.getElementById('bundleModal').classList.add('active');
+  renderSavedBundleDetail();
+}
+
+function closeBundleModal() {
+  document.getElementById('bundleModal').classList.remove('active');
+  currentBundleId = null;
+  if (currentTab === 'bundles') renderBundlesTab();
+  else if (currentTab === 'dashboard') renderDashboard();
+}
+
+function renderBundleBuilder() {
+  const available = inventory.filter(c => c.status === 'in_stock' || bundleBuilderState.selectedIds.includes(c.id));
+  const selectedComics = inventory.filter(c => bundleBuilderState.selectedIds.includes(c.id));
+  const totalValue = selectedComics.reduce((sum, c) => sum + ((c.pricing?.raw_value_low || 0) + (c.pricing?.raw_value_high || 0)) / 2, 0);
+  const targetPrice = totalValue * 0.65;
+
+  let html = `
+    <div class="modal-title">📦 Build Bundle</div>
+    <div class="modal-subtitle">${bundleBuilderState.type} • Pick comics to include</div>
+
+    <input type="text" id="bundleTitleInput" placeholder="Bundle title (e.g. 'X-Men #220-240 Run Lot')" value="${bundleBuilderState.title}" style="margin-bottom: 14px">
+
+    <div class="stats-grid" style="margin-bottom:14px">
+      <div class="stat-card" style="padding:10px"><div class="stat-label" style="font-size:10px">Selected</div><div class="stat-value" style="font-size:18px">${selectedComics.length}</div></div>
+      <div class="stat-card" style="padding:10px"><div class="stat-label" style="font-size:10px">Target Price</div><div class="stat-value" style="font-size:18px;color:#10b981">$${targetPrice.toFixed(0)}</div><div class="stat-sub" style="font-size:10px">~65% of $${totalValue.toFixed(0)}</div></div>
+    </div>
+  `;
+
+  // Group: selected first, then others
+  const selectedSet = new Set(bundleBuilderState.selectedIds);
+  const sorted = [...available].sort((a, b) => {
+    const aSel = selectedSet.has(a.id) ? 0 : 1;
+    const bSel = selectedSet.has(b.id) ? 0 : 1;
+    if (aSel !== bSel) return aSel - bSel;
+    const at = (a.info?.title || '').localeCompare(b.info?.title || '');
+    if (at !== 0) return at;
+    return parseInt((a.info?.issue_number || '').replace(/\D/g,'')) - parseInt((b.info?.issue_number || '').replace(/\D/g,''));
+  });
+
+  html += `<div style="margin-bottom:14px">`;
+  sorted.forEach(comic => {
+    const isSelected = selectedSet.has(comic.id);
+    const value = comic.pricing && comic.pricing.raw_value_high > 0
+      ? `$${((comic.pricing.raw_value_low + comic.pricing.raw_value_high) / 2).toFixed(0)}`
+      : '$?';
+    const thumb = comic.thumbnail || comic.image;
+    html += `
+      <div class="selectable-comic ${isSelected ? 'selected' : ''}" onclick="toggleBundleComic('${comic.id}')">
+        <div class="selectable-checkbox">${isSelected ? '✓' : ''}</div>
+        <div class="selectable-thumb">${thumb ? `<img src="${thumb}">` : ''}</div>
+        <div class="selectable-info">
+          <div class="selectable-title">${comic.info?.title || 'Unknown'} ${comic.info?.issue_number || ''}</div>
+          <div class="selectable-meta">${comic.info?.year || ''} • ${value} • ${comic.info?.grade_label || 'Ungraded'}</div>
+        </div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+
+  html += `
+    <div class="action-stack">
+      <button class="btn-primary" onclick="saveBundleDraft()" ${selectedComics.length < 2 ? 'disabled' : ''}>Save Bundle (${selectedComics.length})</button>
+    </div>
+  `;
+  document.getElementById('bundleContent').innerHTML = html;
+}
+
+function toggleBundleComic(id) {
+  const titleInput = document.getElementById('bundleTitleInput');
+  if (titleInput) bundleBuilderState.title = titleInput.value;
+  const idx = bundleBuilderState.selectedIds.indexOf(id);
+  if (idx >= 0) bundleBuilderState.selectedIds.splice(idx, 1);
+  else bundleBuilderState.selectedIds.push(id);
+  renderBundleBuilder();
+}
+
+function saveBundleDraft() {
+  const titleInput = document.getElementById('bundleTitleInput');
+  const title = (titleInput?.value || bundleBuilderState.title || 'Untitled Bundle').trim();
+  if (bundleBuilderState.selectedIds.length < 2) { alert('Select at least 2 comics'); return; }
+
+  const id = 'b_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+  const bundle = {
+    id,
+    type: bundleBuilderState.type || 'Custom',
+    title,
+    comicIds: [...bundleBuilderState.selectedIds],
+    status: 'draft',
+    created_at: new Date().toISOString(),
+    listing: null,
+    price: null,
+    sold_price: null
+  };
+  bundles.unshift(bundle);
+
+  // Update comic statuses to in_bundle
+  bundleBuilderState.selectedIds.forEach(cid => {
+    const c = inventory.find(x => x.id === cid);
+    if (c && c.status === 'in_stock') c.status = 'in_bundle';
+  });
+
+  saveBundles();
+  saveInventory();
+
+  currentBundleId = id;
+  renderSavedBundleDetail();
+}
+
+function renderSavedBundleDetail() {
+  const bundle = bundles.find(b => b.id === currentBundleId);
+  if (!bundle) { closeBundleModal(); return; }
+  const comics = inventory.filter(c => bundle.comicIds.includes(c.id));
+  const totalValue = comics.reduce((sum, c) => sum + ((c.pricing?.raw_value_low || 0) + (c.pricing?.raw_value_high || 0)) / 2, 0);
+  const targetPrice = bundle.price || Math.round(totalValue * 0.65);
+
+  let html = `
+    <div class="modal-title">${bundle.title}</div>
+    <div class="modal-subtitle">${bundle.type} • ${comics.length} comics</div>
+
+    <div class="stats-grid" style="margin-bottom:14px">
+      <div class="stat-card success"><div class="stat-label">💰 Target Price</div><div class="stat-value" style="font-size:22px">$${targetPrice}</div><div class="stat-sub">~65% of single sum</div></div>
+      <div class="stat-card"><div class="stat-label">📈 Sum of Singles</div><div class="stat-value" style="font-size:22px">$${totalValue.toFixed(0)}</div><div class="stat-sub">if sold individually</div></div>
+    </div>
+
+    <div class="platform-rec">
+      <div class="label">📍 Recommended Platform</div>
+      <div class="platform-name">${comics.length >= 20 ? 'eBay (Bundle Auction)' : targetPrice >= 50 ? 'eBay Buy It Now' : 'Mercari or eBay'}</div>
+      <div class="body">${comics.length >= 20 ? 'Large lots do well as 7-day auctions ending Sunday evening. Set a starting bid around 50% of target. Photograph the lot fanned out so all covers show.' : targetPrice >= 50 ? 'Use Buy It Now with Best Offer enabled. Mid-tier collectors browse eBay for run/arc lots.' : 'Mercari has lower fees for bundles in this range. Either platform works.'}</div>
+    </div>
+
+    <div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:14px 0 6px">Comics in Bundle</div>
+    <div style="margin-bottom:14px">
+  `;
+  comics.forEach(comic => {
+    const value = comic.pricing && comic.pricing.raw_value_high > 0
+      ? `$${((comic.pricing.raw_value_low + comic.pricing.raw_value_high) / 2).toFixed(0)}`
+      : '$?';
+    const thumb = comic.thumbnail || comic.image;
+    html += `
+      <div class="selectable-comic">
+        <div class="selectable-thumb">${thumb ? `<img src="${thumb}">` : ''}</div>
+        <div class="selectable-info">
+          <div class="selectable-title">${comic.info?.title || 'Unknown'} ${comic.info?.issue_number || ''}</div>
+          <div class="selectable-meta">${comic.info?.year || ''} • ${value}</div>
+        </div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+
+  html += `
+    <div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:14px 0 6px">Status</div>
+    <div class="status-row">
+      <button class="status-btn ${bundle.status==='draft'?'active':''}" onclick="setBundleStatus('draft')">Draft</button>
+      <button class="status-btn ${bundle.status==='listed'?'active':''}" onclick="setBundleStatus('listed')">Listed</button>
+      <button class="status-btn ${bundle.status==='sold'?'active':''}" onclick="setBundleStatus('sold')">Sold</button>
+    </div>
+  `;
+
+  if (bundle.status === 'sold') {
+    html += `
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Sold For</div>
+        <input type="number" id="bundleSoldPrice" placeholder="Sold price" value="${bundle.sold_price || ''}" onchange="updateBundleSoldPrice(this.value)">
+      </div>
+    `;
+  }
+
+  html += `
+    <div class="action-stack">
+      <button class="action-btn" onclick="generateBundleListing('${bundle.id}')"><span>📝 Generate Bundle Listing</span><span class="arrow">→</span></button>
+      <button class="action-btn" onclick="editBundle('${bundle.id}')"><span>✏️ Edit Bundle</span><span class="arrow">→</span></button>
+      <button class="action-btn danger" onclick="deleteBundle('${bundle.id}')"><span>🗑️ Delete Bundle</span><span class="arrow">→</span></button>
+    </div>
+  `;
+
+  document.getElementById('bundleContent').innerHTML = html;
+}
+
+function setBundleStatus(status) {
+  const bundle = bundles.find(b => b.id === currentBundleId);
+  if (!bundle) return;
+  bundle.status = status;
+  saveBundles();
+  renderSavedBundleDetail();
+}
+
+function updateBundleSoldPrice(price) {
+  const bundle = bundles.find(b => b.id === currentBundleId);
+  if (!bundle) return;
+  bundle.sold_price = parseFloat(price) || 0;
+  saveBundles();
+}
+
+function deleteBundle(id) {
+  if (!confirm('Delete this bundle? Comics will return to In Stock.')) return;
+  const bundle = bundles.find(b => b.id === id);
+  if (bundle) {
+    bundle.comicIds.forEach(cid => {
+      const c = inventory.find(x => x.id === cid);
+      if (c && c.status === 'in_bundle') c.status = 'in_stock';
+    });
+  }
+  bundles = bundles.filter(b => b.id !== id);
+  saveBundles();
+  saveInventory();
+  closeBundleModal();
+}
+
+function editBundle(id) {
+  const bundle = bundles.find(b => b.id === id);
+  if (!bundle) return;
+  bundleBuilderState = {
+    selectedIds: [...bundle.comicIds],
+    type: bundle.type,
+    title: bundle.title,
+    editingId: id
+  };
+
+  // Free comics from this bundle so they appear in the picker
+  bundle.comicIds.forEach(cid => {
+    const c = inventory.find(x => x.id === cid);
+    if (c && c.status === 'in_bundle') c.status = 'in_stock';
+  });
+  // Remove the bundle (will be recreated on save)
+  bundles = bundles.filter(b => b.id !== id);
+  saveBundles();
+  saveInventory();
+
+  renderBundleBuilder();
+}
+
+async function generateBundleListing(bundleId) {
+  const bundle = bundles.find(b => b.id === bundleId);
+  if (!bundle) return;
+  const comics = inventory.filter(c => bundle.comicIds.includes(c.id));
+
+  document.getElementById('listingModal').classList.add('active');
+  document.getElementById('listingContent').innerHTML = `
+    <div class="modal-title">Generating bundle listing...</div>
+    <div class="spinner"></div>
+    <div class="loading-text">Writing optimized listing for ${comics.length}-comic lot</div>
+  `;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        messages: [{ role: 'user', content: bundleListingPrompt(bundle, comics) }]
+      })
+    });
+    const data = await resp.json();
+    const text = (data.content || []).map(i => i.text || '').join('');
+    const listing = JSON.parse(text.replace(/```json|```/g, '').trim());
+
+    bundle.listing = listing;
+    bundle.price = listing.price_suggestion;
+    saveBundles();
+
+    renderBundleListingOutput(bundle, listing, comics);
+  } catch (e) {
+    document.getElementById('listingContent').innerHTML = `
+      <div class="modal-title" style="color:#fca5a5">Failed to generate</div>
+      <div class="modal-subtitle">${e.message}</div>
+    `;
+  }
+}
+
+function renderBundleListingOutput(bundle, listing, comics) {
+  const issueList = comics.map(c => `${c.info.title} ${c.info.issue_number}`).join(', ');
+  const platformRec = comics.length >= 20 ? 'eBay (Bundle Auction)' : listing.price_suggestion >= 50 ? 'eBay Buy It Now' : 'Mercari or eBay';
+
+  document.getElementById('listingContent').innerHTML = `
+    <div class="modal-title">📝 Bundle Listing Ready</div>
+    <div class="modal-subtitle">${bundle.title}</div>
+
+    <div class="platform-rec">
+      <div class="label">📍 Recommended Platform</div>
+      <div class="platform-name">${platformRec}</div>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">eBay Title (${listing.title.length}/80 chars)</div>
+      <div class="field-value">${listing.title}</div>
+      <button class="copy-btn" onclick="copyText(this, \`${escapeForCopy(listing.title)}\`)">📋 Copy Title</button>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">Suggested Bundle Price</div>
+      <div class="field-value" style="font-size:20px;font-weight:900;color:#10b981">$${listing.price_suggestion}</div>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">Description</div>
+      <div class="field-value">${listing.description}</div>
+      <button class="copy-btn" onclick="copyText(this, \`${escapeForCopy(listing.description)}\`)">📋 Copy Description</button>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">Issues Included (paste in description)</div>
+      <div class="field-value">${issueList}</div>
+      <button class="copy-btn" onclick="copyText(this, \`${escapeForCopy(issueList)}\`)">📋 Copy Issue List</button>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">Keywords / Tags</div>
+      <div class="field-value">${listing.keywords}</div>
+      <button class="copy-btn" onclick="copyText(this, \`${escapeForCopy(listing.keywords)}\`)">📋 Copy Keywords</button>
+    </div>
+
+    <div class="listing-output">
+      <div class="field-label">📦 Shipping Notes</div>
+      <div class="field-value">${listing.shipping_notes}</div>
+    </div>
+
+    <div class="action-stack">
+      <button class="btn-primary" onclick="markBundleListed('${bundle.id}')">✓ Mark Bundle as Listed</button>
+    </div>
+  `;
+}
+
+function markBundleListed(id) {
+  const bundle = bundles.find(b => b.id === id);
+  if (!bundle) return;
+  bundle.status = 'listed';
+  saveBundles();
+  closeListingModal();
+  if (currentBundleId) renderSavedBundleDetail();
 }
 
 // ============ SCAN FLOW ============
@@ -818,10 +1392,7 @@ function openScanModal() {
   document.getElementById('scanModal').classList.add('active');
   renderScanStep();
 }
-
-function closeScanModal() {
-  document.getElementById('scanModal').classList.remove('active');
-}
+function closeScanModal() { document.getElementById('scanModal').classList.remove('active'); }
 
 function renderStepIndicator() {
   const coverDone = scanState.cover ? 'done' : (scanState.step === 'cover' ? 'active' : '');
@@ -849,7 +1420,7 @@ function renderCoverStep() {
     ${renderStepIndicator()}
     <div class="photo-tip">
       <div class="tip-label">💡 Tip</div>
-      <div class="tip-body">Lay the comic flat on a clean surface. Good lighting, no glare. Get the whole cover in frame including the price box and barcode.</div>
+      <div class="tip-body">Lay flat on a clean surface. Good lighting, no glare. Get the whole cover including price box and barcode.</div>
     </div>
     <div class="upload-zone" onclick="document.getElementById('coverFile').click()">
       <div class="icon">📚</div>
@@ -871,7 +1442,7 @@ function renderSpineStep() {
     ${renderStepIndicator()}
     <div class="photo-tip">
       <div class="tip-label">💡 Why the Spine Matters</div>
-      <div class="tip-body">A clean cover with a damaged spine grades much lower than it looks. Spine roll, ticks, and color breaks are the #1 reason comics fail to grade well. Hold the comic on its side and photograph the spine straight on.</div>
+      <div class="tip-body">A clean cover with a damaged spine grades much lower than it looks. Hold the comic on its side and photograph the spine straight on.</div>
     </div>
     <div class="upload-zone" onclick="document.getElementById('spineFile').click()">
       <div class="icon">📐</div>
@@ -881,7 +1452,6 @@ function renderSpineStep() {
     <button class="btn-camera-modal" onclick="document.getElementById('spineCam').click()">📱 Take Photo with Camera</button>
     <input type="file" accept="image/*" id="spineFile" style="display:none">
     <input type="file" accept="image/*" capture="environment" id="spineCam" style="display:none">
-
     <button class="skip-btn" style="width:100%; padding: 12px; margin-top: 8px;" onclick="skipSpine()">Skip — use cover only (less accurate grading)</button>
   `;
   document.getElementById('spineFile').onchange = (e) => handlePhoto(e.target.files[0], 'spine');
@@ -896,27 +1466,18 @@ function renderReviewStep() {
     <div class="photo-stack">
       <div class="photo-row">
         <div class="photo-mini"><img src="${scanState.cover.preview}"></div>
-        <div class="photo-info">
-          <div class="label">✓ Cover Photo</div>
-          <div class="sub">Front cover ready</div>
-        </div>
+        <div class="photo-info"><div class="label">✓ Cover Photo</div><div class="sub">Front cover ready</div></div>
         <button class="skip-btn" onclick="retakePhoto('cover')">Retake</button>
       </div>
       ${scanState.spine ? `
       <div class="photo-row">
         <div class="photo-mini"><img src="${scanState.spine.preview}"></div>
-        <div class="photo-info">
-          <div class="label">✓ Spine Photo</div>
-          <div class="sub">Spine ready</div>
-        </div>
+        <div class="photo-info"><div class="label">✓ Spine Photo</div><div class="sub">Spine ready</div></div>
         <button class="skip-btn" onclick="retakePhoto('spine')">Retake</button>
       </div>` : `
       <div class="photo-row" style="opacity: 0.6">
         <div class="photo-mini" style="display:flex;align-items:center;justify-content:center;font-size:24px;color:#475569">—</div>
-        <div class="photo-info">
-          <div class="label">Spine: skipped</div>
-          <div class="sub">Grade estimate will be less precise</div>
-        </div>
+        <div class="photo-info"><div class="label">Spine: skipped</div><div class="sub">Grade estimate will be less precise</div></div>
         <button class="skip-btn" onclick="retakePhoto('spine')">Add it</button>
       </div>`}
     </div>
@@ -926,21 +1487,16 @@ function renderReviewStep() {
 
 async function handlePhoto(file, type) {
   if (!file || !file.type.startsWith('image/')) return;
-
   document.getElementById('scanContent').innerHTML = `
     <div class="modal-title">Processing photo...</div>
     <div class="spinner"></div>
     <div class="loading-text">Compressing image for upload</div>
   `;
-
   try {
     const compressed = await compressImage(file);
     scanState[type] = compressed;
-    if (type === 'cover') {
-      scanState.step = 'spine';
-    } else {
-      scanState.step = 'review';
-    }
+    if (type === 'cover') scanState.step = 'spine';
+    else scanState.step = 'review';
     renderScanStep();
   } catch (e) {
     document.getElementById('scanContent').innerHTML = `
@@ -951,16 +1507,8 @@ async function handlePhoto(file, type) {
   }
 }
 
-function skipSpine() {
-  scanState.step = 'review';
-  renderScanStep();
-}
-
-function retakePhoto(type) {
-  scanState[type] = null;
-  scanState.step = type;
-  renderScanStep();
-}
+function skipSpine() { scanState.step = 'review'; renderScanStep(); }
+function retakePhoto(type) { scanState[type] = null; scanState.step = type; renderScanStep(); }
 
 async function runScan() {
   document.getElementById('scanContent').innerHTML = `
@@ -968,7 +1516,6 @@ async function runScan() {
     <div class="spinner"></div>
     <div class="loading-text">${scanState.spine ? 'Analyzing cover and spine condition' : 'Identifying issue and condition'}</div>
   `;
-
   try {
     const content = [
       { type: 'image', source: { type: 'base64', media_type: scanState.cover.mediaType, data: scanState.cover.base64 } }
@@ -980,17 +1527,8 @@ async function runScan() {
 
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        messages: [{ role: 'user', content }]
-      })
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1500, messages: [{ role: 'user', content }] })
     });
     const data = await resp.json();
     if (data.error) throw new Error(data.error.message);
@@ -1008,15 +1546,10 @@ async function runScan() {
 
     const id = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
     const comic = {
-      id,
-      thumbnail: scanState.cover.thumbnail,
+      id, thumbnail: scanState.cover.thumbnail,
       spine_thumbnail: scanState.spine ? scanState.spine.thumbnail : null,
-      info,
-      pricing,
-      status: 'in_stock',
-      added_at: new Date().toISOString(),
-      sold_price: null,
-      listing: null
+      info, pricing, status: 'in_stock',
+      added_at: new Date().toISOString(), sold_price: null, listing: null
     };
     inventory.unshift(comic);
     saveInventory();
@@ -1037,15 +1570,9 @@ async function runPricing(info) {
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
+        model: 'claude-sonnet-4-20250514', max_tokens: 1500,
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{ role: 'user', content: pricingPrompt(info) }]
       })
@@ -1053,18 +1580,15 @@ async function runPricing(info) {
     const data = await resp.json();
     const textBlocks = (data.content || []).filter(i => i.type === 'text').map(i => i.text);
     const fullText = textBlocks.join('\n');
-
     const jsonMatch = fullText.match(/\{[\s\S]*?\}/);
-    if (jsonMatch) {
-      try { return JSON.parse(jsonMatch[0]); } catch(e) {}
-    }
-
+    if (jsonMatch) { try { return JSON.parse(jsonMatch[0]); } catch(e) {} }
     return { raw_value_low: 0, raw_value_high: 0, graded_value_92: 0, graded_value_98: 0, market_notes: fullText.slice(0, 200), trending: 'unknown' };
   } catch (e) {
     return { raw_value_low: 0, raw_value_high: 0, graded_value_92: 0, graded_value_98: 0, market_notes: 'Pricing lookup failed', trending: 'unknown' };
   }
 }
 
+// ============ DETAIL MODAL ============
 function openDetail(id) {
   detailComicId = id;
   document.getElementById('detailModal').classList.add('active');
@@ -1076,6 +1600,7 @@ function closeDetailModal() {
   detailComicId = null;
   if (currentTab === 'dashboard') renderDashboard();
   else if (currentTab === 'inventory') renderInventory();
+  else if (currentTab === 'bundles') renderBundlesTab();
   else renderActions();
 }
 
@@ -1087,6 +1612,7 @@ function renderDetail() {
   const recClass = `rec-${rec.type}`;
   const thumb = comic.thumbnail || comic.image;
   const spineThumb = comic.spine_thumbnail;
+  const platformRec = getPlatformRec(comic);
 
   let html = `
     ${thumb ? `<div class="detail-cover"><img src="${thumb}"></div>` : ''}
@@ -1113,6 +1639,12 @@ function renderDetail() {
       <div class="rec-action">${rec.action}</div>
       <div class="rec-reason">${rec.reason}</div>
     </div>
+
+    <div class="platform-rec">
+      <div class="label">📍 Where to Sell</div>
+      <div class="platform-name" style="color:${platformRec.color}">${platformRec.primary}</div>
+      <div class="body">${platformRec.reasoning}</div>
+    </div>
   `;
 
   if (comic.pricing && comic.pricing.raw_value_high > 0) {
@@ -1132,6 +1664,10 @@ function renderDetail() {
       <div class="detail-cell"><div class="detail-cell-label">Cover Artist</div><div class="detail-cell-value">${comic.info.cover_artist || 'Unknown'}</div></div>
     </div>
   `;
+
+  if (comic.info.story_arc && comic.info.story_arc !== 'N/A' && comic.info.story_arc.toLowerCase() !== 'none') {
+    html += `<div class="info-box" style="background:rgba(168,85,247,0.05);border-color:rgba(168,85,247,0.2)"><div class="label" style="color:#a855f7">📖 Story Arc</div><div class="body" style="color:#e9d5ff">${comic.info.story_arc}</div></div>`;
+  }
 
   if (comic.info.key_issue && comic.info.key_issue_reason) {
     html += `<div class="info-box" style="background:rgba(251,191,36,0.05);border-color:rgba(251,191,36,0.2)"><div class="label" style="color:#fbbf24">🔑 Why It's a Key</div><div class="body" style="color:#fde68a">${comic.info.key_issue_reason}</div></div>`;
@@ -1154,9 +1690,9 @@ function renderDetail() {
     <div class="status-row">
       <button class="status-btn ${comic.status==='in_stock'?'active':''}" onclick="setStatus('in_stock')">In Stock</button>
       <button class="status-btn ${comic.status==='listed'?'active':''}" onclick="setStatus('listed')">Listed</button>
+      <button class="status-btn ${comic.status==='in_bundle'?'active':''}" onclick="setStatus('in_bundle')">In Bundle</button>
       <button class="status-btn ${comic.status==='grading'?'active':''}" onclick="setStatus('grading')">At CGC</button>
       <button class="status-btn ${comic.status==='sold'?'active':''}" onclick="setStatus('sold')">Sold</button>
-      <button class="status-btn ${comic.status==='bulk'?'active':''}" onclick="setStatus('bulk')">Bulk Lot</button>
     </div>
   `;
 
@@ -1196,7 +1732,11 @@ function updateSoldPrice(price) {
 function deleteComic(id) {
   if (!confirm('Delete this comic from inventory?')) return;
   inventory = inventory.filter(c => c.id !== id);
+  // Also remove from any bundle containing it
+  bundles.forEach(b => { b.comicIds = b.comicIds.filter(cid => cid !== id); });
+  bundles = bundles.filter(b => b.comicIds.length >= 2);
   saveInventory();
+  saveBundles();
   closeDetailModal();
 }
 
@@ -1216,36 +1756,23 @@ async function rerunPricing(id) {
 async function generateListing(id) {
   const comic = inventory.find(c => c.id === id);
   if (!comic) return;
-
   document.getElementById('listingModal').classList.add('active');
   document.getElementById('listingContent').innerHTML = `
     <div class="modal-title">Generating listing...</div>
     <div class="spinner"></div>
     <div class="loading-text">Writing optimized title, description, and price</div>
   `;
-
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        messages: [{ role: 'user', content: listingPrompt(comic) }]
-      })
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1500, messages: [{ role: 'user', content: listingPrompt(comic) }] })
     });
     const data = await resp.json();
     const text = (data.content || []).map(i => i.text || '').join('');
     const listing = JSON.parse(text.replace(/```json|```/g, '').trim());
-
     comic.listing = listing;
     saveInventory();
-
     renderListing(comic, listing);
   } catch (e) {
     document.getElementById('listingContent').innerHTML = `
@@ -1255,14 +1782,19 @@ async function generateListing(id) {
   }
 }
 
-function escapeForCopy(s) {
-  return (s || '').replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
-}
+function escapeForCopy(s) { return (s || '').replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$'); }
 
 function renderListing(comic, listing) {
+  const platformRec = getPlatformRec(comic);
   document.getElementById('listingContent').innerHTML = `
     <div class="modal-title">📝 Listing Ready</div>
     <div class="modal-subtitle">${comic.info.title} ${comic.info.issue_number}</div>
+
+    <div class="platform-rec">
+      <div class="label">📍 Recommended Platform</div>
+      <div class="platform-name" style="color:${platformRec.color}">${platformRec.primary}</div>
+      <div class="body">${platformRec.reasoning}</div>
+    </div>
 
     <div class="listing-output">
       <div class="field-label">eBay Title (${listing.title.length}/80 chars)</div>
@@ -1316,28 +1848,18 @@ function markListed(id) {
   if (detailComicId) renderDetail();
 }
 
-function closeListingModal() {
-  document.getElementById('listingModal').classList.remove('active');
-}
+function closeListingModal() { document.getElementById('listingModal').classList.remove('active'); }
 
 function exportData() {
   if (inventory.length === 0) { alert('No inventory to export'); return; }
   const headers = ['Title','Issue','Publisher','Year','Era','Grade','Key Issue','Status','Raw Low','Raw High','CGC 9.2','CGC 9.8','Sold Price','Added'];
   const rows = inventory.map(c => [
-    c.info?.title || '',
-    c.info?.issue_number || '',
-    c.info?.publisher || '',
-    c.info?.year || '',
-    c.info?.era || '',
-    c.info?.estimated_grade || '',
-    c.info?.key_issue ? 'Yes' : 'No',
-    c.status,
-    c.pricing?.raw_value_low || '',
-    c.pricing?.raw_value_high || '',
-    c.pricing?.graded_value_92 || '',
-    c.pricing?.graded_value_98 || '',
-    c.sold_price || '',
-    c.added_at?.split('T')[0] || ''
+    c.info?.title || '', c.info?.issue_number || '', c.info?.publisher || '',
+    c.info?.year || '', c.info?.era || '', c.info?.estimated_grade || '',
+    c.info?.key_issue ? 'Yes' : 'No', c.status,
+    c.pricing?.raw_value_low || '', c.pricing?.raw_value_high || '',
+    c.pricing?.graded_value_92 || '', c.pricing?.graded_value_98 || '',
+    c.sold_price || '', c.added_at?.split('T')[0] || ''
   ]);
   const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
   const blob = new Blob([csv], { type: 'text/csv' });
