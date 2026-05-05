@@ -394,6 +394,7 @@
 
 <script>
 let apiKey = '';
+let pcKey = '';
 let inventory = [];
 let bundles = [];
 let currentTab = 'dashboard';
@@ -430,19 +431,25 @@ Variant: ${info.variant}`;
 }
 
 function listingPrompt(comic) {
-  return `Generate an optimized listing for this comic book. Return ONLY valid JSON (no markdown):
+  return `Generate an optimized listing for this RAW (ungraded) comic book. Return ONLY valid JSON (no markdown):
 {"title":"eBay-optimized title (max 80 chars)","description":"4-6 sentence description","price_suggestion":number,"keywords":"comma separated SEO tags","shipping_notes":"brief shipping recommendation"}
+
+CRITICAL LISTING RULES:
+- Do NOT state a numerical grade (no "VF/NM", "9.4", "Near Mint", "9.0", etc.) anywhere in the title or description. The buyer grades from photos.
+- Do NOT make absolute condition claims like "Near Mint condition" or "perfect" or "flawless".
+- DO use neutral descriptive language about what's visible: cover sharpness, spine, corners, color strike, any visible defects. Examples: "Bright cover, tight spine, sharp corners. Please review photos.", "Light edge wear at top corner. Otherwise clean. See photos for full condition.", "Bagged and boarded. Photos show actual book."
+- Always end the description with "Please review photos and judge condition for yourself" or similar — this protects against return disputes.
+- Title should focus on: title, issue number, year, key issue identifier (e.g., "1st Venom"), and "Raw" or "Ungraded" if it fits.
 
 Comic: ${comic.info.title} ${comic.info.issue_number}
 Publisher: ${comic.info.publisher}
 Year: ${comic.info.year}
 Era: ${comic.info.era}
-Grade: ${comic.info.estimated_grade} (${comic.info.grade_label})
 Key Issue: ${comic.info.key_issue ? 'Yes - ' + comic.info.key_issue_reason : 'No'}
 Characters: ${comic.info.notable_characters}
 Cover Artist: ${comic.info.cover_artist}
 Variant: ${comic.info.variant}
-Condition Notes: ${comic.info.condition_notes}
+Visible Condition Notes (for your reference, do NOT translate to a grade in the listing): ${comic.info.condition_notes}
 Market Range: $${comic.pricing?.raw_value_low || '?'} - $${comic.pricing?.raw_value_high || '?'} raw`;
 }
 
@@ -525,10 +532,12 @@ function compressImage(file, opts = {}) {
 
 function init() {
   const stored = localStorage.getItem('comichq_api_key');
+  const storedPc = localStorage.getItem('comichq_pc_key');
   const inv = localStorage.getItem('comichq_inventory');
   const bn = localStorage.getItem('comichq_bundles');
   if (inv) try { inventory = JSON.parse(inv); } catch(e) { inventory = []; }
   if (bn) try { bundles = JSON.parse(bn); } catch(e) { bundles = []; }
+  if (storedPc) pcKey = storedPc;
   if (stored) { apiKey = stored; showApp(); }
   else { document.getElementById('setupScreen').style.display = 'flex'; }
 
@@ -549,9 +558,30 @@ function showApp() {
 }
 
 function showSettings() {
-  if (confirm('Reset API key? You will need to enter it again.')) {
-    localStorage.removeItem('comichq_api_key');
-    location.reload();
+  const action = prompt(
+    'Settings — enter a number:\n\n' +
+    '1 — Reset Anthropic API key\n' +
+    '2 — Set / update PriceCharting key' + (pcKey ? ' (currently set)' : ' (not set)') + '\n' +
+    '3 — Clear PriceCharting key\n\n' +
+    'Cancel to close.'
+  );
+  if (action === '1') {
+    if (confirm('Reset API key? You will need to enter it again.')) {
+      localStorage.removeItem('comichq_api_key');
+      location.reload();
+    }
+  } else if (action === '2') {
+    const key = prompt('PriceCharting API key (40 characters). Optional — used for structured pricing on supported comics. If blank or invalid, the app falls back to web search.', pcKey || '');
+    if (key !== null) {
+      pcKey = key.trim();
+      if (pcKey) localStorage.setItem('comichq_pc_key', pcKey);
+      else localStorage.removeItem('comichq_pc_key');
+      alert(pcKey ? 'PriceCharting key saved.' : 'PriceCharting key cleared.');
+    }
+  } else if (action === '3') {
+    pcKey = '';
+    localStorage.removeItem('comichq_pc_key');
+    alert('PriceCharting key cleared.');
   }
 }
 
@@ -1566,13 +1596,65 @@ async function runScan() {
   }
 }
 
+// ============ PRICECHARTING LOOKUP ============
+// Tries PriceCharting's structured pricing API. Returns a pricing object in
+// Comic HQ's existing schema, or null if PC has no usable match (caller then
+// falls back to the Claude web-search pricing path).
+async function tryPriceCharting(info) {
+  if (!pcKey) return null;
+  const query = `${info.title || ''} ${info.issue_number || ''}`.trim();
+  if (!query) return null;
+
+  try {
+    const url = `https://www.pricecharting.com/api/products?t=${pcKey}&q=${encodeURIComponent(query)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.status === 'error' || !data.products || !data.products.length) return null;
+
+    // Filter to comic books only — PC indexes Pokemon/video games in the same
+    // product space, and an unfiltered "best match" can return a Pokemon card
+    // for a comic query.
+    const comic = data.products.find(p =>
+      (p['console-name'] || '').toLowerCase().startsWith('comic books')
+    );
+    if (!comic) return null;
+
+    // Map PC fields to Comic HQ schema (verified against the public price
+    // guide for ASM #300 — see the project notes).
+    const cents = (v) => (v == null || v === '' || v === 0) ? 0 : Math.round(v) / 100;
+
+    const result = {
+      raw_value_low:    cents(comic['cib-price']),       // ~4.0
+      raw_value_high:   cents(comic['graded-price']),    // ~8.0
+      graded_value_92:  cents(comic['box-only-price']),  // CGC 9.2
+      graded_value_98:  cents(comic['manual-only-price']), // CGC 9.8
+      market_notes: `Source: PriceCharting (${comic['product-name']}). Loose avg $${cents(comic['loose-price'])}, CGC 9.4 $${cents(comic['condition-17-price'])}.`,
+      trending: 'unknown',
+      _source: 'pricecharting',
+      _pc_id: comic.id,
+    };
+
+    // If PC returns no usable pricing data (rare but happens on niche entries),
+    // treat as a miss and fall back.
+    if (!result.raw_value_high && !result.graded_value_98) return null;
+    return result;
+  } catch (e) {
+    return null;
+  }
+}
+
 async function runPricing(info) {
+  // 1. Try PriceCharting first (structured, fast, free of LLM variance).
+  const pc = await tryPriceCharting(info);
+  if (pc) return pc;
+
+  // 2. Fall back to existing Claude web-search pricing path.
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514', max_tokens: 1500,
+        model: 'claude-sonnet-4-20250514', max_tokens: 3000,
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{ role: 'user', content: pricingPrompt(info) }]
       })
@@ -1580,12 +1662,53 @@ async function runPricing(info) {
     const data = await resp.json();
     const textBlocks = (data.content || []).filter(i => i.type === 'text').map(i => i.text);
     const fullText = textBlocks.join('\n');
-    const jsonMatch = fullText.match(/\{[\s\S]*?\}/);
-    if (jsonMatch) { try { return JSON.parse(jsonMatch[0]); } catch(e) {} }
-    return { raw_value_low: 0, raw_value_high: 0, graded_value_92: 0, graded_value_98: 0, market_notes: fullText.slice(0, 200), trending: 'unknown' };
+    const parsed = extractPricingJson(fullText);
+    if (parsed) { parsed._source = 'web_search'; return parsed; }
+    return { raw_value_low: 0, raw_value_high: 0, graded_value_92: 0, graded_value_98: 0, market_notes: fullText.slice(0, 200), trending: 'unknown', _source: 'web_search' };
   } catch (e) {
-    return { raw_value_low: 0, raw_value_high: 0, graded_value_92: 0, graded_value_98: 0, market_notes: 'Pricing lookup failed', trending: 'unknown' };
+    return { raw_value_low: 0, raw_value_high: 0, graded_value_92: 0, graded_value_98: 0, market_notes: 'Pricing lookup failed', trending: 'unknown', _source: 'failed' };
   }
+}
+
+// Robust JSON extraction for pricing responses. Handles three failure modes
+// that caused the "have to rerun pricing 2-3 times" bug:
+//   1. Markdown code fences (```json ... ```) — stripped before parsing.
+//   2. Stray { in preamble text — we walk from the END of the string and find
+//      the LAST balanced {...} object, since the JSON answer is always last.
+//   3. Required keys missing — we validate before returning, so partial/
+//      truncated objects fall through to the empty-result path instead of
+//      polluting downstream code.
+function extractPricingJson(text) {
+  if (!text) return null;
+  // Strip markdown fences if present
+  let cleaned = text.replace(/```json\s*/gi, '').replace(/```/g, '');
+
+  // Walk backwards from end of string to find last balanced JSON object
+  for (let end = cleaned.length; end > 0; end--) {
+    if (cleaned[end - 1] !== '}') continue;
+    let depth = 0;
+    for (let start = end - 1; start >= 0; start--) {
+      if (cleaned[start] === '}') depth++;
+      else if (cleaned[start] === '{') {
+        depth--;
+        if (depth === 0) {
+          const candidate = cleaned.slice(start, end);
+          try {
+            const obj = JSON.parse(candidate);
+            // Validate it looks like a pricing object — must have at least one
+            // numeric pricing field. Otherwise it's some other JSON in the
+            // response and we keep walking.
+            if (typeof obj.raw_value_low === 'number' || typeof obj.raw_value_high === 'number' ||
+                typeof obj.graded_value_92 === 'number' || typeof obj.graded_value_98 === 'number') {
+              return obj;
+            }
+          } catch (e) { /* not valid JSON, keep walking */ }
+          break; // found balanced pair but it didn't parse/validate; try next outer }
+        }
+      }
+    }
+  }
+  return null;
 }
 
 // ============ DETAIL MODAL ============
